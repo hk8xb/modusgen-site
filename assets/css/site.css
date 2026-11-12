@@ -568,33 +568,13 @@ textarea {
 .logos__list {
   display: flex;
   flex: 1;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: flex-end;
-  gap: 40px;
-}
-
-.logos__pair {
-  display: flex;
-  align-items: flex-end;
-  gap: 40px;
+  gap: 24px 40px;
   margin: 0;
   padding: 0;
   list-style: none;
-}
-
-/* Two by two (the Company page, and phones below): each pair is a row on the same two columns,
-   the grid centred as a block and each mark centred in its cell. */
-.company-logos .logos__list {
-  display: grid;
-  grid-template-columns: repeat(2, max-content);
-  justify-content: center;
-}
-
-.company-logos .logos__pair {
-  display: grid;
-  grid-column: 1 / -1;
-  grid-template-columns: subgrid;
-  justify-items: center;
 }
 
 /* in the hero they sit under the actions: the label above, the marks in a row */
@@ -610,7 +590,7 @@ textarea {
 }
 
 /* Each mark keeps the size that balances it with the others (--h) and is pulled down by the share
-   of it that hangs below its word's baseline (--below), so the four words sit on one line. */
+   of it that hangs below its word's baseline (--below), so the words sit on one line. */
 .logo {
   display: block;
   width: auto;
@@ -632,11 +612,6 @@ textarea {
 .logo--capital-one {
   --h: 32px;
   --below: 0.2575;
-}
-
-.logo--uber {
-  --h: 20px;
-  --below: 0;
 }
 
 .logo--aws {
@@ -843,19 +818,10 @@ textarea {
     align-items: flex-start;
   }
 
-  /* two by two, the grid centred as a block, each row's words on one baseline */
+  /* the three marks stay in one centred row under the label, their words on one baseline */
   .logos__list {
-    display: grid;
-    grid-template-columns: repeat(2, max-content);
-    justify-content: center;
-    gap: 28px 56px;
-  }
-
-  .logos__pair {
-    display: grid;
-    grid-column: 1 / -1;
-    grid-template-columns: subgrid;
-    justify-items: center;
+    align-self: stretch;
+    gap: 24px 36px;
   }
 }
 
@@ -2029,12 +1995,27 @@ html:not(.js) .step::before {
   --h: 46px;
 }
 
-.company-logos .logo--uber {
-  --h: 29px;
-}
-
 .company-logos .logo--aws {
   --h: 44px;
+}
+
+/* on phones the Company page's larger marks scale down so the three still fit one row */
+@media (max-width: 560px) {
+  .company-logos .logos__list {
+    gap: 24px 36px;
+  }
+
+  .company-logos .logo--sk-hynix {
+    --h: 46px;
+  }
+
+  .company-logos .logo--capital-one {
+    --h: 34px;
+  }
+
+  .company-logos .logo--aws {
+    --h: 33px;
+  }
 }
 
 .rules {
