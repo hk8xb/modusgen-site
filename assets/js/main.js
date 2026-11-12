@@ -230,13 +230,15 @@ if (term) initTerminal(term, { reduce });
 
 const econ = $("[data-econ]");
 if (econ) {
-  // one coding task at list prices, in dollars: low and high
+  // one coding task at list prices, in dollars, tier against tier; the dial scales the open models
   const MAX = 8.5;
-  const TASK = { frontier: [0.885, 5.64], hosted: [0.34, 0.48], own: [0.74, 2.69] };
+  const TASK = { opus: 5.64, kimi: 3.54, sonnet: 2.82, haiku: 0.885, deepseek: 0.343 };
+  const OPEN = new Set(["kimi", "deepseek"]);
   const range = $("[data-factor]", econ);
   const out = $("[data-factor-out]", econ);
   const read = $("[data-chart-read]", econ);
   const usd = (v) => `$${v.toFixed(2)}`;
+  const share = (a, b) => Math.round((a / b) * 100);
 
   const setFactor = (f) => {
     const times = `${f.toFixed(1)}×`;
@@ -244,19 +246,16 @@ if (econ) {
     range.setAttribute("aria-valuetext", `${f.toFixed(1)} times the tokens`);
     range.style.setProperty("--fill", `${((f - 1) / 2) * 100}%`);
     for (const key of Object.keys(TASK)) {
-      const k = key === "frontier" ? 1 : f;
-      const lo = TASK[key][0] * k;
-      const hi = TASK[key][1] * k;
-      const bar = $(`[data-bar="${key}"]`, econ);
-      bar.style.setProperty("--from", (lo / MAX).toFixed(4));
-      bar.style.setProperty("--to", (Math.min(hi, MAX) / MAX).toFixed(4));
-      $(`[data-val="${key}"]`, econ).textContent = `${usd(lo)} to ${usd(hi)}`;
+      const v = TASK[key] * (OPEN.has(key) ? f : 1);
+      $(`[data-bar="${key}"]`, econ).style.setProperty("--to", (Math.min(v, MAX) / MAX).toFixed(4));
+      $(`[data-val="${key}"]`, econ).textContent = usd(v);
     }
-    const low = Math.round(((TASK.hosted[0] * f) / TASK.frontier[1]) * 100);
-    const high = Math.round(((TASK.hosted[1] * f) / TASK.frontier[0]) * 100);
+    const top = share(TASK.kimi * f, TASK.opus);
+    const small = share(TASK.deepseek * f, TASK.haiku);
     const lead = f === 1 ? "Token for token" : `At ${times} the tokens`;
-    let line = `${lead}, the hosted route costs ${low}% to ${high}% of the frontier price.`;
-    if (high > 100) line += " At the top of that range, moving does not pay.";
+    let line = `${lead}, the open model of the same tier costs ${top}% of Opus 5.5's price per task, and ${small}% of Haiku 5.5's.`;
+    if (top >= 100 && small >= 100) line += " At this many tokens neither move pays.";
+    else if (top >= 100) line += " At this many tokens the top-tier move does not pay.";
     read.textContent = line;
   };
 

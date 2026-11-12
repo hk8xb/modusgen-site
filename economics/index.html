@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Economics · ModusGen</title>
-  <meta name="description" content="What one coding task costs on a frontier API, on a hosted open-weight model and on your own GPUs, at list prices.">
+  <meta name="description" content="What one coding task costs on each frontier tier and on the open-weight model of the same tier, at list prices, and why developer time counts too.">
   <meta name="theme-color" content="#D8C6A6">
   <meta name="color-scheme" content="dark">
   <link rel="canonical" href="https://modusgen.com/economics/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ModusGen">
   <meta property="og:title" content="Economics · ModusGen">
-  <meta property="og:description" content="What one coding task costs on a frontier API, on a hosted open-weight model and on your own GPUs, at list prices.">
+  <meta property="og:description" content="What one coding task costs on each frontier tier and on the open-weight model of the same tier, at list prices, and why developer time counts too.">
   <meta property="og:url" content="https://modusgen.com/economics/">
   <meta property="og:image" content="https://modusgen.com/assets/img/og.png">
   <meta property="og:image:width" content="1200">
@@ -21,9 +21,9 @@
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
   <link rel="preload" href="../assets/fonts/MonaSans-VF-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="../assets/css/site.css?v=99db8e1828">
+  <link rel="stylesheet" href="../assets/css/site.css?v=7602643628">
   <script>document.documentElement.classList.add("js");</script>
-  <script type="module" src="../assets/js/main.js?v=99db8e1828"></script>
+  <script type="module" src="../assets/js/main.js?v=7602643628"></script>
   
 </head>
 <body class="page--economics">
@@ -45,7 +45,7 @@
 <section class="page-hero page-hero--split">
       <div class="wrap page-hero__split">
         <h1 class="page-hero__title" data-lines>Where the saving comes from.</h1>
-        <p class="page-hero__lede">Open-weight models cost far less per token than the large frontier models. How busy your machines are, and what you pay for them, decides how much of that you keep.</p>
+        <p class="page-hero__lede">We set each frontier model against an open-weight model of the same tier on independent coding tests. Then we count developer time as well as tokens.</p>
       </div>
     </section>
 
@@ -54,48 +54,81 @@
         <div class="dial">
           <div class="dial__control">
             <label class="dial__label" for="factor">Tokens the open model needs for the same work</label>
-            <output class="dial__out num" for="factor" data-factor-out>2.0×</output>
-            <input class="dial__range" id="factor" type="range" min="1" max="3" step="0.1" value="2" aria-valuetext="2.0 times the tokens" data-factor>
+            <output class="dial__out num" for="factor" data-factor-out>1.0×</output>
+            <input class="dial__range" id="factor" type="range" min="1" max="3" step="0.1" value="1" aria-valuetext="1.0 times the tokens" data-factor>
             <div class="dial__scale" aria-hidden="true"><span>same tokens</span><span>2×</span><span>3×</span></div>
           </div>
-          <p class="dial__help">Open models can need more tokens to finish the same task. We measure the real figure on your own repositories before anything moves.</p>
+          <p class="dial__help">An open model can need more tokens to finish the same task. We measure the real figure on your own repositories before anything moves.</p>
         </div>
 
         <div class="econ__grid">
           <div class="panel chart" data-chart>
-            <h2 class="panel__title">One coding task, at list prices</h2>
-            <p class="chart__setup">8 million input tokens, nine in ten read from cache, and 50,000 output tokens.</p>
+            <h2 class="panel__title">One coding task, tier against tier</h2>
+            <p class="chart__setup">At list prices: 8 million input tokens, nine in ten read from cache, and 50,000 output tokens.</p>
             <div class="chart__plot">
               <div class="chart__axis" aria-hidden="true">
                 <span style="--at:0">$0</span><span style="--at:2">$2</span><span style="--at:4">$4</span><span style="--at:6">$6</span><span style="--at:8">$8</span>
               </div>
-              <div class="chart__row">
-                <p class="chart__label">Frontier API</p>
-                <div class="chart__track"><span class="chart__bar chart__bar--frontier" data-bar="frontier" style="--from:.1041;--to:.6635"></span></div>
-                <p class="chart__value num" data-val="frontier">$0.89 to $5.64</p>
+              <div class="chart__tier">
+                <p class="chart__tier-name">Top tier</p>
+                <div class="chart__row">
+                  <p class="chart__label">Claude Opus 5.5</p>
+                  <div class="chart__track"><span class="chart__bar chart__bar--frontier" data-bar="opus" style="--from:0;--to:.6635"></span></div>
+                  <p class="chart__value num" data-val="opus">$5.64</p>
+                </div>
+                <div class="chart__row">
+                  <p class="chart__label">Kimi K3.1 Pro, open weights, hosted</p>
+                  <div class="chart__track"><span class="chart__bar chart__bar--open" data-bar="kimi" style="--from:0;--to:.4165"></span></div>
+                  <p class="chart__value num" data-val="kimi">$3.54</p>
+                </div>
               </div>
-              <div class="chart__row">
-                <p class="chart__label">Open-weight, hosted endpoint</p>
-                <div class="chart__track"><span class="chart__bar chart__bar--open" data-bar="hosted" style="--from:.08;--to:.1129"></span></div>
-                <p class="chart__value num" data-val="hosted">$0.68 to $0.96</p>
+              <div class="chart__tier">
+                <p class="chart__tier-name">Middle tier</p>
+                <div class="chart__row">
+                  <p class="chart__label">Claude Sonnet 5.5</p>
+                  <div class="chart__track"><span class="chart__bar chart__bar--frontier" data-bar="sonnet" style="--from:0;--to:.3318"></span></div>
+                  <p class="chart__value num" data-val="sonnet">$2.82</p>
+                </div>
+                <div class="chart__row">
+                  <p class="chart__label">No open-weight model at this level yet</p>
+                  <div class="chart__track chart__track--none"></div>
+                  <p class="chart__value chart__value--none num" aria-hidden="true">—</p>
+                </div>
               </div>
-              <div class="chart__row">
-                <p class="chart__label">Open-weight, your own GPUs kept busy</p>
-                <div class="chart__track"><span class="chart__bar chart__bar--own" data-bar="own" style="--from:.1741;--to:.6329"></span></div>
-                <p class="chart__value num" data-val="own">$1.48 to $5.38</p>
+              <div class="chart__tier">
+                <p class="chart__tier-name">Small tier</p>
+                <div class="chart__row">
+                  <p class="chart__label">Claude Haiku 5.5</p>
+                  <div class="chart__track"><span class="chart__bar chart__bar--frontier" data-bar="haiku" style="--from:0;--to:.1041"></span></div>
+                  <p class="chart__value num" data-val="haiku">$0.89</p>
+                </div>
+                <div class="chart__row">
+                  <p class="chart__label">DeepSeek V4.1 Flash, open weights, hosted</p>
+                  <div class="chart__track"><span class="chart__bar chart__bar--open" data-bar="deepseek" style="--from:0;--to:.0404"></span></div>
+                  <p class="chart__value num" data-val="deepseek">$0.34</p>
+                </div>
               </div>
             </div>
-            <p class="chart__read" data-chart-read aria-live="polite">At 2.0× the tokens, the hosted route costs 12% to 108% of the frontier price. At the top of that range, moving does not pay.</p>
-            <p class="panel__fine">Frontier runs from Claude Haiku 5.5, at its price for the long prompts coding agents send, to Claude Opus 5.5. Your own GPUs are priced at public list prices, fully busy; half-idle machines cost twice as much per task.</p>
+            <p class="chart__read" data-chart-read aria-live="polite">Token for token, the open model of the same tier costs 63% of Opus 5.5's price per task, and 39% of Haiku 5.5's.</p>
+            <p class="panel__fine">Prices read November 12, 2026. Kimi K3.1 Pro is level with Opus on terminal-agent tests and behind it on some broader ones; it charges the same for cached input, which is most of what agents read, so the top tier saves less than the small one. DeepSeek V4.1 Flash scores above Haiku, priced here for the long prompts coding agents send. No open-weight model reaches Sonnet 5.5, or Claude Fable 5.2 at $9.84 a task.</p>
           </div>
 
-          <div class="panel routes">
-            <h2 class="panel__title">Which route fits</h2>
-            <dl class="routes__list">
-              <div><dt>Your own machines</dt><dd>When the data must stay inside, or the load is large and steady enough to keep the GPUs busy.</dd></div>
-              <div><dt>Your cloud account</dt><dd>When the data must stay private and the load is still settling. It also covers the wait for machines.</dd></div>
-              <div><dt>A hosted endpoint</dt><dd>When the data may leave your network. It is often the cheapest place to start, and we say so.</dd></div>
-            </dl>
+          <div class="econ__side">
+            <div class="panel time">
+              <h2 class="panel__title">Developer time counts</h2>
+              <p class="time__figure num">$38,400</p>
+              <p class="time__caption">a month: one percent of 200 developers' time, at $120 an hour.</p>
+              <p class="time__body">That is more than most token savings. Every assessment shows how much time a move could lose before its saving is gone: for a 200-developer team on Opus, about two and a half minutes a day. The pilot measures it on your own tasks.</p>
+            </div>
+
+            <div class="panel routes">
+              <h2 class="panel__title">Which route fits</h2>
+              <dl class="routes__list">
+                <div><dt>Your own machines</dt><dd>When the data must stay inside, or the load is large and steady enough to keep the GPUs busy.</dd></div>
+                <div><dt>Your cloud account</dt><dd>When the data must stay private and the load is still settling. It also covers the wait for machines.</dd></div>
+                <div><dt>A hosted endpoint</dt><dd>When the data may leave your network. It is often the cheapest place to start, and we say so.</dd></div>
+              </dl>
+            </div>
           </div>
         </div>
       </div>
