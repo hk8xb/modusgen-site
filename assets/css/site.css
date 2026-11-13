@@ -183,6 +183,11 @@ textarea {
   white-space: nowrap;
 }
 
+/* keeps a hyphenated word whole, so "ex-engineers" never breaks after "ex-" */
+.nowrap {
+  white-space: nowrap;
+}
+
 .skip {
   position: fixed;
   left: 12px;
