@@ -1558,54 +1558,374 @@ textarea {
 
 /* ------------------------------------------------------------------ economics */
 
-.dial {
-  display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-  align-items: center;
-  gap: 16px 48px;
-  padding: 24px 0 28px;
-  border-block: 1px solid var(--line);
+/* The tier ledger: one row per tier, between hairlines. Name, the work it takes, and what the
+   same work costs hosted, drawn as a brown frontier bar over a blue open-weight bar. */
+.tiers {
+  --cols: minmax(0, 3fr) minmax(0, 5fr) minmax(0, 4fr);
+  border-top: 1px solid var(--line-2);
 }
 
-.dial__control {
+.tiers__head {
+  display: grid;
+  grid-template-columns: var(--cols);
+  gap: 0 48px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-3);
+  font-size: 0.8125rem;
+}
+
+.tier {
+  display: grid;
+  grid-template-columns: var(--cols);
+  gap: 24px 48px;
+  padding: 40px 0 44px;
+  border-bottom: 1px solid var(--line);
+}
+
+.tier__title {
+  font-size: clamp(1.5rem, 1vw + 1.15rem, 2rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+.tier__models {
+  max-width: 15rem;
+  margin-top: 12px;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.tier__jobs {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+}
+
+.tier__jobs dt {
+  color: var(--ink-3);
+  font-size: 0.8125rem;
+}
+
+.tier__jobs dd {
+  max-width: 32rem;
+  margin: 4px 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+.tier__lead {
+  max-width: 32rem;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+.tier__proof {
+  max-width: 34rem;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-3);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.tier__saving {
+  font-size: clamp(1.5rem, 1vw + 1.15rem, 2rem);
+  font-weight: 500;
+  font-stretch: 96%;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.tier__saving .num {
+  font-size: 1em;
+  letter-spacing: -0.05em;
+}
+
+.tier__unit {
+  margin-top: 8px;
+  color: var(--ink-3);
+  font-size: 0.875rem;
+}
+
+.pair {
+  display: grid;
+  gap: 14px;
+  margin-top: 22px;
+}
+
+.pair__row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: baseline;
-  gap: 10px 16px;
+  gap: 6px 16px;
 }
 
-.dial__label {
+.pair__label {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+}
+
+.pair__value {
+  color: var(--ink);
+  font-size: 0.8125rem;
+}
+
+.pair__row .track {
+  grid-column: 1 / -1;
+}
+
+.tier--out .tier__title {
+  color: var(--ink-3);
+}
+
+.tier--out .tier__proof {
+  margin-top: 12px;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.tiers__fine {
+  max-width: 62rem;
+  margin-top: 24px;
+  color: var(--ink-3);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 1000px) {
+  .tiers {
+    --cols: minmax(0, 5fr) minmax(0, 7fr);
+  }
+
+  .tiers__head {
+    display: none;
+  }
+
+  .tier__cost {
+    grid-column: 2;
+  }
+}
+
+/* on a phone the saving follows the tier's name, before the detail */
+@media (max-width: 640px) {
+  .tiers {
+    --cols: minmax(0, 1fr);
+  }
+
+  .tier {
+    gap: 24px;
+    padding: 32px 0 36px;
+  }
+
+  .tier__cost {
+    grid-column: auto;
+    order: 1;
+  }
+
+  .tier__work {
+    order: 2;
+  }
+}
+
+/* Tracks and bars, shared by the ledger and the calculator. Frontier models are brown, hosted open
+   weights solid blue, and owned servers split in two: running costs in a half-strength blue, then
+   the hardware being written off as a blue outline, which is gone once it is paid off. */
+.track {
+  position: relative;
+  display: block;
+  height: 10px;
+  background: var(--wash);
+}
+
+.bar {
+  position: absolute;
+  inset-block: 0;
+  left: calc(var(--x, 0) * 100%);
+  width: max(3px, calc(var(--w) * 100%));
+  border-radius: 2px;
+}
+
+/* calculator bars glide to each new figure; they sit absolutely in a fixed track, so nothing else reflows */
+.calc .bar {
+  transition:
+    width 0.6s var(--ease),
+    left 0.6s var(--ease);
+}
+
+.bar--frontier {
+  background: var(--neutral-bar);
+}
+
+.bar--open {
+  background: var(--accent);
+}
+
+.bar--run {
+  background: rgba(35, 70, 174, 0.5);
+}
+
+.bar--run.is-joined {
+  border-radius: 2px 0 0 2px;
+}
+
+.bar--hw {
+  border-radius: 0 2px 2px 0;
+  background: rgba(35, 70, 174, 0.12);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+/* Paper tabs: native radios, drawn as words on a hairline with an ink rule under the chosen one. */
+.seg {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+}
+
+.seg__opt {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  padding: 12px 10px;
+  color: var(--ink-3);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: center;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.seg__opt input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.seg__opt::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 2px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transition: transform 0.35s var(--ease);
+}
+
+.seg__opt:hover {
+  color: var(--ink-2);
+}
+
+.seg__opt:has(input:checked) {
+  color: var(--ink);
+}
+
+.seg__opt:has(input:checked)::after {
+  transform: none;
+}
+
+.seg__opt:has(input:focus-visible) {
+  outline: 2px solid var(--accent-hi);
+  outline-offset: -4px;
+  border-radius: var(--r-1);
+}
+
+.seg--sm {
+  display: inline-grid;
+  grid-auto-columns: auto;
+  margin-top: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.seg--sm .seg__opt {
+  min-height: 40px;
+  padding: 8px 16px;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* The calculator: tabs on top, inputs on the left, the four costs on the right, the basis below. */
+.calc__tiers {
+  padding: 0 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.calc__body {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+}
+
+.calc__inputs {
+  display: grid;
+  align-content: start;
+  gap: 28px;
+  padding: 32px;
+  border-right: 1px solid var(--line);
+}
+
+.calc__outputs {
+  padding: 32px;
+}
+
+.calc__bill {
+  display: grid;
+}
+
+.calc__label {
   font-size: 0.9375rem;
   font-weight: 500;
 }
 
-.dial__out {
+.calc__out {
+  margin-top: 12px;
   color: var(--ink);
-  font-size: 1rem;
+  line-height: 1;
 }
 
-.dial__range {
-  grid-column: 1 / -1;
+/* a single display figure, so it takes Mona Sans's proportional figures like a heading */
+.calc__amount {
+  font-size: clamp(1.875rem, 1.2vw + 1.4rem, 2.375rem);
+  font-weight: 500;
+  font-stretch: 96%;
+  letter-spacing: -0.035em;
+}
+
+.calc__per {
+  margin-left: 4px;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+}
+
+.calc__range {
   width: 100%;
   height: 28px;
-  margin: 0;
+  margin: 18px 0 0;
   background: transparent;
   cursor: pointer;
   -webkit-appearance: none;
   appearance: none;
 }
 
-.dial__range::-webkit-slider-runnable-track {
+.calc__range::-webkit-slider-runnable-track {
   height: 2px;
   background: linear-gradient(to right, var(--ink) var(--fill, 50%), var(--track) var(--fill, 50%));
 }
 
-.dial__range::-moz-range-track {
+.calc__range::-moz-range-track {
   height: 2px;
   background: linear-gradient(to right, var(--ink) var(--fill, 50%), var(--track) var(--fill, 50%));
 }
 
-.dial__range::-webkit-slider-thumb {
+.calc__range::-webkit-slider-thumb {
   width: 16px;
   height: 16px;
   margin-top: -7px;
@@ -1616,7 +1936,7 @@ textarea {
   appearance: none;
 }
 
-.dial__range::-moz-range-thumb {
+.calc__range::-moz-range-thumb {
   width: 16px;
   height: 16px;
   border: 0;
@@ -1624,236 +1944,192 @@ textarea {
   background: var(--ink);
 }
 
-.dial__range:focus-visible {
+.calc__range:focus-visible {
   outline: 2px solid var(--accent-hi);
   outline-offset: 6px;
 }
 
-.dial__scale {
+/* labels sit under the thumb's centre at each value: 8px in from either end */
+.calc__scale {
+  position: relative;
+  height: 1rem;
+  margin-top: 2px;
+  color: var(--ink-3);
+  font: 400 0.75rem/1 var(--mono);
+}
+
+.calc__scale span {
+  position: absolute;
+  top: 0;
+  left: calc(8px + var(--at) * (100% - 16px));
+  transform: translateX(-50%);
+}
+
+.calc__scale span:first-child {
+  transform: translateX(-8px);
+}
+
+.calc__scale span:last-child {
+  transform: translateX(calc(-100% + 8px));
+}
+
+.calc__basis {
+  margin-top: 14px;
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.calc__speed {
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.calc__note {
+  max-width: 26rem;
+  margin-top: 12px;
+  color: var(--ink-3);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+.calc__speed > .calc__note:first-child,
+.calc__speed > [hidden] + .calc__note {
+  margin-top: 0;
+}
+
+.calc__rows {
+  display: grid;
+  gap: 20px;
+}
+
+.calc__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 8px 16px;
+}
+
+.calc__name {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+}
+
+.calc__fig {
+  white-space: nowrap;
+}
+
+.calc__fig .num {
+  color: var(--ink);
+  font-size: 0.875rem;
+}
+
+.calc__pct {
+  display: inline-block;
+  min-width: 5.75rem;
+  margin-left: 12px;
+  color: var(--ink-2);
+  font-size: 0.8125rem;
+  text-align: right;
+}
+
+.calc__row .track {
   grid-column: 1 / -1;
+  height: 12px;
+}
+
+.calc__legend {
   display: flex;
-  justify-content: space-between;
-  margin-top: -6px;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  margin-top: 18px;
   color: var(--ink-3);
   font-size: 0.75rem;
 }
 
-.dial__help {
-  max-width: 28rem;
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-}
-
-.econ__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-  gap: 16px;
-  margin-top: 24px;
-}
-
-.chart,
-.routes {
-  padding: 32px;
-}
-
-.chart__setup {
-  margin-top: 6px;
-  color: var(--ink-3);
-  font-size: 0.875rem;
-}
-
-.chart__plot {
-  --valw: 8.5rem;
-  position: relative;
-  display: grid;
-  gap: 24px;
-  margin-top: 28px;
-  padding-top: 32px;
-}
-
-.chart__axis {
-  position: absolute;
-  inset: 0 calc(var(--valw) + 16px) 0 0;
-  pointer-events: none;
-}
-
-.chart__axis span {
-  position: absolute;
-  top: 0;
-  left: calc(var(--at) / 8.5 * 100%);
-  color: var(--ink-3);
-  font: 400 0.6875rem/1 var(--mono);
-}
-
-.chart__tier {
-  display: grid;
-  gap: 14px;
-  padding-top: 14px;
-  border-top: 1px solid var(--line);
-}
-
-.chart__axis + .chart__tier {
-  padding-top: 0;
-  border-top: 0;
-}
-
-.chart__tier-name {
-  color: var(--ink-3);
-  font: 500 0.6875rem/1 var(--mono);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.chart__row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) var(--valw);
-  align-items: center;
-  column-gap: 16px;
-}
-
-.chart__label {
-  grid-column: 1 / -1;
-  margin-bottom: 8px;
-  color: var(--ink-2);
-  font-size: 0.875rem;
-}
-
-.chart__track {
-  position: relative;
-  height: 14px;
-  /* a tick every two dollars on a scale of 8.5 */
-  background-color: var(--wash);
-  background-image: linear-gradient(to right, var(--track) 1px, transparent 1px);
-  background-size: calc(100% / 8.5 * 2) 100%;
-}
-
-.chart__bar {
-  position: absolute;
-  inset-block: 0;
-  left: calc(var(--from) * 100%);
-  width: max(6px, calc((var(--to) - var(--from)) * 100%));
+.key {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 7px;
+  vertical-align: -1px;
   border-radius: 2px;
 }
 
-.chart__bar--frontier {
-  background: var(--neutral-bar);
+.key--run {
+  background: rgba(35, 70, 174, 0.5);
 }
 
-.chart__bar--open {
-  background: var(--accent);
+.key--hw {
+  background: rgba(35, 70, 174, 0.12);
+  box-shadow: inset 0 0 0 1px var(--accent);
 }
 
-/* a tier with no open-weight peer: an empty, dashed track */
-.chart__track--none {
-  background: none;
-  border: 1px dashed var(--track);
-}
-
-.chart__value {
-  color: var(--ink);
-  font-size: 0.78125rem;
-  text-align: right;
-  white-space: nowrap;
-}
-
-.chart__read {
+.calc__read {
   margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
   font-size: 1rem;
-  line-height: 1.5;
-}
-
-.econ__side {
-  display: grid;
-  align-content: start;
-  gap: 16px;
-}
-
-.time {
-  padding: 32px;
-}
-
-.time__figure {
-  margin-top: 18px;
-  color: var(--ink);
-  font-size: 2.25rem;
-  line-height: 1;
-  letter-spacing: -0.02em;
-}
-
-.time__caption {
-  margin-top: 8px;
-  color: var(--ink-2);
-  font-size: 0.875rem;
-}
-
-.time__body {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid var(--line);
-  color: var(--ink-2);
-  font-size: 0.875rem;
   line-height: 1.55;
 }
 
-.routes__list {
-  margin: 20px 0 0;
+.calc__fine {
+  padding: 16px 32px 18px;
 }
 
-.routes__list div {
-  padding: 16px 0;
-  border-top: 1px solid var(--line);
+/* without scripts the calculator stands as one worked example */
+.no-js-only {
+  display: none;
 }
 
-.routes__list dt {
-  font-size: 0.9375rem;
-  font-weight: 500;
+html:not(.js) .js-only {
+  display: none !important;
 }
 
-.routes__list dd {
-  margin: 6px 0 0;
-  color: var(--ink-2);
-  font-size: 0.875rem;
-  line-height: 1.55;
+html:not(.js) .no-js-only {
+  display: block;
 }
 
-@media (max-width: 1000px) {
-  .dial,
-  .econ__grid {
+.routes .routes__list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 900px) {
+  .calc__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .calc__inputs {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .routes .routes__list {
     grid-template-columns: minmax(0, 1fr);
   }
 }
 
 @media (max-width: 560px) {
-  .chart,
-  .routes,
-  .time {
+  .calc__tiers {
+    padding: 0 4px;
+  }
+
+  .seg__opt {
+    padding: 12px 6px;
+    font-size: 0.875rem;
+  }
+
+  .calc__inputs,
+  .calc__outputs {
     padding: 24px 20px;
   }
 
-  .chart__plot {
-    --valw: 0rem;
+  .calc__fine {
+    padding: 14px 20px 16px;
   }
 
-  .chart__axis {
-    inset-inline-end: 0;
-  }
-
-  .chart__row {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .chart__label {
-    margin-bottom: 4px;
-  }
-
-  .chart__value {
-    grid-row: 2;
-    margin-bottom: 8px;
-    text-align: left;
-  }
-
-  .chart__value--none {
-    display: none;
+  .calc__pct {
+    min-width: 0;
   }
 }
 
@@ -1934,6 +2210,143 @@ textarea {
 @media (max-width: 520px) {
   .stacklist li {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* infrastructure: hardware per tier */
+.section--ruled {
+  border-top: 1px solid var(--line);
+}
+
+.spec--tiers {
+  margin-top: 0;
+}
+
+.spec--tiers thead th:nth-child(1) {
+  width: 20%;
+}
+
+.spec--tiers thead th:nth-child(2) {
+  width: 31%;
+}
+
+.spec--tiers thead th:nth-child(3) {
+  width: 31%;
+}
+
+.spec--tiers th,
+.spec--tiers td {
+  padding: 18px 24px 18px 0;
+}
+
+.spec--tiers tbody th {
+  width: auto;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.spec--tiers td:last-child,
+.spec--tiers th:last-child {
+  padding-right: 0;
+}
+
+.spec--tiers td .num {
+  color: var(--ink);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.spec__sub {
+  display: block;
+  margin-top: 4px;
+  color: var(--ink-3);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+
+.sizing {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 16px 48px;
+  margin-top: 56px;
+}
+
+.sizing__title {
+  font-size: 1.125rem;
+  letter-spacing: -0.015em;
+}
+
+.sizing__lead p {
+  max-width: 22rem;
+  margin-top: 10px;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+.sizing__body p {
+  max-width: 40rem;
+  color: var(--ink-2);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.sizing__body p + p {
+  margin-top: 14px;
+}
+
+.sizing__body .sizing__rule {
+  color: var(--ink);
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.sizing__body .sizing__basis {
+  color: var(--ink-3);
+  font-size: 0.8125rem;
+}
+
+@media (max-width: 900px) {
+  .sizing {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* on a phone each tier becomes a short block, every figure under its own label */
+@media (max-width: 760px) {
+  .spec--tiers thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .spec--tiers tr {
+    display: grid;
+    gap: 10px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .spec--tiers tbody tr:first-child {
+    border-top: 1px solid var(--line);
+  }
+
+  .spec--tiers th,
+  .spec--tiers td {
+    padding: 0;
+    border: 0;
+  }
+
+  .spec--tiers td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 2px;
+    color: var(--ink-3);
+    font-size: 0.75rem;
   }
 }
 

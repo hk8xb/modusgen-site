@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Economics · ModusGen</title>
-  <meta name="description" content="What one coding task costs on each frontier tier and on the open-weight model of the same tier, at list prices, and why developer time counts too.">
+  <meta name="description" content="Each AI workflow goes to the open-weight tier its work needs, priced against Claude three ways: hosted, on servers you own, and after their four-year write-off.">
   <meta name="theme-color" content="#D8C6A6">
   <meta name="color-scheme" content="dark">
   <link rel="canonical" href="https://modusgen.com/economics/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ModusGen">
   <meta property="og:title" content="Economics · ModusGen">
-  <meta property="og:description" content="What one coding task costs on each frontier tier and on the open-weight model of the same tier, at list prices, and why developer time counts too.">
+  <meta property="og:description" content="Each AI workflow goes to the open-weight tier its work needs, priced against Claude three ways: hosted, on servers you own, and after their four-year write-off.">
   <meta property="og:url" content="https://modusgen.com/economics/">
   <meta property="og:image" content="https://modusgen.com/assets/img/og.png">
   <meta property="og:image:width" content="1200">
@@ -21,9 +21,9 @@
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
   <link rel="preload" href="../assets/fonts/MonaSans-VF-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="../assets/css/site.css?v=70b93b6eb6">
+  <link rel="stylesheet" href="../assets/css/site.css?v=8c1dde1509">
   <script>document.documentElement.classList.add("js");</script>
-  <script type="module" src="../assets/js/main.js?v=70b93b6eb6"></script>
+  <script type="module" src="../assets/js/main.js?v=8c1dde1509"></script>
   
 </head>
 <body class="page--economics">
@@ -44,93 +44,177 @@
   <main id="main">
 <section class="page-hero page-hero--split">
       <div class="wrap page-hero__split">
-        <h1 class="page-hero__title" data-lines>Where the saving comes from.</h1>
-        <p class="page-hero__lede">We set each frontier model against an open-weight model of the same tier on independent coding tests. Then we count developer time as well as tokens.</p>
+        <h1 class="page-hero__title" data-lines>Pay for the model the work needs.</h1>
+        <p class="page-hero__lede">Three tiers of open-weight models now cover almost everything companies run on Claude. We place each workflow in the tier its work needs, then price it three ways: hosted, on servers you own, and after their four-year write-off.</p>
       </div>
     </section>
 
-    <section class="section section--flush">
-      <div class="wrap econ" data-econ>
-        <div class="dial">
-          <div class="dial__control">
-            <label class="dial__label" for="factor">Tokens the open model needs for the same work</label>
-            <output class="dial__out num" for="factor" data-factor-out>1.0×</output>
-            <input class="dial__range" id="factor" type="range" min="1" max="3" step="0.1" value="1" aria-valuetext="1.0 times the tokens" data-factor>
-            <div class="dial__scale" aria-hidden="true"><span>same tokens</span><span>2×</span><span>3×</span></div>
-          </div>
-          <p class="dial__help">An open model can need more tokens to finish the same task. We measure the real figure on your own repositories before anything moves.</p>
-        </div>
-
-        <div class="econ__grid">
-          <div class="panel chart" data-chart>
-            <h2 class="panel__title">One coding task, tier against tier</h2>
-            <p class="chart__setup">At list prices: 8 million input tokens, nine in ten read from cache, and 50,000 output tokens.</p>
-            <div class="chart__plot">
-              <div class="chart__axis" aria-hidden="true">
-                <span style="--at:0">$0</span><span style="--at:2">$2</span><span style="--at:4">$4</span><span style="--at:6">$6</span><span style="--at:8">$8</span>
-              </div>
-              <div class="chart__tier">
-                <p class="chart__tier-name">Top tier</p>
-                <div class="chart__row">
-                  <p class="chart__label">Claude Opus 5.5</p>
-                  <div class="chart__track"><span class="chart__bar chart__bar--frontier" data-bar="opus" style="--from:0;--to:.6635"></span></div>
-                  <p class="chart__value num" data-val="opus">$5.64</p>
-                </div>
-                <div class="chart__row">
-                  <p class="chart__label">Kimi K3.1 Pro, open weights, hosted</p>
-                  <div class="chart__track"><span class="chart__bar chart__bar--open" data-bar="kimi" style="--from:0;--to:.4165"></span></div>
-                  <p class="chart__value num" data-val="kimi">$3.54</p>
-                </div>
-              </div>
-              <div class="chart__tier">
-                <p class="chart__tier-name">Middle tier</p>
-                <div class="chart__row">
-                  <p class="chart__label">Claude Sonnet 5.5</p>
-                  <div class="chart__track"><span class="chart__bar chart__bar--frontier" data-bar="sonnet" style="--from:0;--to:.3318"></span></div>
-                  <p class="chart__value num" data-val="sonnet">$2.82</p>
-                </div>
-                <div class="chart__row">
-                  <p class="chart__label">No open-weight model at this level yet</p>
-                  <div class="chart__track chart__track--none"></div>
-                  <p class="chart__value chart__value--none num" aria-hidden="true">—</p>
-                </div>
-              </div>
-              <div class="chart__tier">
-                <p class="chart__tier-name">Small tier</p>
-                <div class="chart__row">
-                  <p class="chart__label">Claude Haiku 5.5</p>
-                  <div class="chart__track"><span class="chart__bar chart__bar--frontier" data-bar="haiku" style="--from:0;--to:.1041"></span></div>
-                  <p class="chart__value num" data-val="haiku">$0.89</p>
-                </div>
-                <div class="chart__row">
-                  <p class="chart__label">DeepSeek V4.1 Flash, open weights, hosted</p>
-                  <div class="chart__track"><span class="chart__bar chart__bar--open" data-bar="deepseek" style="--from:0;--to:.0404"></span></div>
-                  <p class="chart__value num" data-val="deepseek">$0.34</p>
-                </div>
-              </div>
-            </div>
-            <p class="chart__read" data-chart-read aria-live="polite">Token for token, the open model of the same tier costs 63% of Opus 5.5's price per task, and 39% of Haiku 5.5's.</p>
-            <p class="panel__fine">Prices read November 12, 2026. Kimi K3.1 Pro is level with Opus on terminal-agent tests and behind it on some broader ones; it charges the same for cached input, which is most of what agents read, so the top tier saves less than the small one. DeepSeek V4.1 Flash scores above Haiku, priced here for the long prompts coding agents send. No open-weight model reaches Sonnet 5.5, or Claude Fable 5.2 at $9.84 a task.</p>
+    <section class="section section--flush" aria-label="The three tiers">
+      <div class="wrap">
+        <div class="tiers">
+          <div class="tiers__head" aria-hidden="true">
+            <span>Tier</span><span>The work it takes</span><span>The same work, hosted, at list prices</span>
           </div>
 
-          <div class="econ__side">
-            <div class="panel time">
-              <h2 class="panel__title">Developer time counts</h2>
-              <p class="time__figure num">$38,400</p>
-              <p class="time__caption">a month: one percent of 200 developers' time, at $120 an hour.</p>
-              <p class="time__body">That is more than most token savings. Every assessment shows how much time a move could lose before its saving is gone: for a 200-developer team on Opus, about two and a half minutes a day. The pilot measures it on your own tasks.</p>
-            </div>
-
-            <div class="panel routes">
-              <h2 class="panel__title">Which route fits</h2>
-              <dl class="routes__list">
-                <div><dt>Your own machines</dt><dd>When the data must stay inside, or the load is large and steady enough to keep the GPUs busy.</dd></div>
-                <div><dt>Your cloud account</dt><dd>When the data must stay private and the load is still settling. It also covers the wait for machines.</dd></div>
-                <div><dt>A hosted endpoint</dt><dd>When the data may leave your network. It is often the cheapest place to start, and we say so.</dd></div>
+          <article class="tier" id="frontier">
+            <header class="tier__name">
+              <h2 class="tier__title">Frontier</h2>
+              <p class="tier__models">Kimi K3.1 Pro</p>
+            </header>
+            <div class="tier__work">
+              <dl class="tier__jobs">
+                <div><dt>Internal</dt><dd>Coding agents, the hardest agent work, very long documents</dd></div>
               </dl>
+              <p class="tier__proof">Ahead of Claude Opus 5.5 on Terminal-Bench 4.0 and level with it on knowledge work in Artificial Analysis's tests, though behind it on the longest coding tasks, which the pilot measures on yours. Cursor built its Composer 2 coding model on an earlier Kimi.</p>
+            </div>
+            <div class="tier__cost">
+              <p class="tier__saving"><span class="num">40%</span> less</p>
+              <p class="tier__unit">for one coding task</p>
+              <div class="pair">
+                <div class="pair__row"><span class="pair__label">Claude Opus 5.5</span><span class="pair__value num">$4.90</span><span class="track" aria-hidden="true"><i class="bar bar--frontier" style="--w:1"></i></span></div>
+                <div class="pair__row"><span class="pair__label">Kimi K3.1 Pro</span><span class="pair__value num">$2.96</span><span class="track" aria-hidden="true"><i class="bar bar--open" style="--w:.6044"></i></span></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="tier" id="workhorse">
+            <header class="tier__name">
+              <h2 class="tier__title">Workhorse</h2>
+              <p class="tier__models"><span class="nowrap">DeepSeek V4.1 Flash</span>, <span class="nowrap">MiniMax M3.1-Flash</span>, <span class="nowrap">GLM-5.3</span></p>
+            </header>
+            <div class="tier__work">
+              <dl class="tier__jobs">
+                <div><dt>Internal</dt><dd>Employee agents across email, chat and documents, knowledge assistants, data and SQL, legal and analyst work</dd></div>
+                <div><dt>Customer-facing</dt><dd>Support agents that take actions, in-product assistants</dd></div>
+              </dl>
+              <p class="tier__proof">MiniMax M3.1-Flash beats Claude Sonnet 5.5 and Opus 5.5 on AutomationBench's SaaS workflows, and DeepSeek V4.1 Flash comes within five points. Intercom says its open-weight support model resolves more conversations than Sonnet 4.6, at about a fifth of the cost.</p>
+            </div>
+            <div class="tier__cost">
+              <p class="tier__saving"><span class="num">89%</span> less</p>
+              <p class="tier__unit">for one agent's working day</p>
+              <div class="pair">
+                <div class="pair__row"><span class="pair__label">Claude Sonnet 5.5</span><span class="pair__value num">$1.76</span><span class="track" aria-hidden="true"><i class="bar bar--frontier" style="--w:1"></i></span></div>
+                <div class="pair__row"><span class="pair__label">DeepSeek V4.1 Flash</span><span class="pair__value num">$0.20</span><span class="track" aria-hidden="true"><i class="bar bar--open" style="--w:.1145"></i></span></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="tier" id="high-volume">
+            <header class="tier__name">
+              <h2 class="tier__title">High-volume</h2>
+              <p class="tier__models"><span class="nowrap">Qwen3.8-Flash-Next</span>, <span class="nowrap">GLM-5.3-Flash</span>, <span class="nowrap">Qwen3.8 27B</span></p>
+            </header>
+            <div class="tier__work">
+              <dl class="tier__jobs">
+                <div><dt>Internal</dt><dd>Document processing, summaries and drafts</dd></div>
+                <div><dt>Customer-facing</dt><dd>FAQ chat, voice agents</dd></div>
+              </dl>
+              <p class="tier__proof">The two Flash models beat Claude Haiku 5.5 by 20 to 25 points on AutomationBench and match it on knowledge work. Qwen3.8 27B runs on a single GPU.</p>
+            </div>
+            <div class="tier__cost">
+              <p class="tier__saving"><span class="num">93%</span> less</p>
+              <p class="tier__unit">for 1,000 document pages</p>
+              <div class="pair">
+                <div class="pair__row"><span class="pair__label">Claude Sonnet 5.5</span><span class="pair__value num">$9.00</span><span class="track" aria-hidden="true"><i class="bar bar--frontier" style="--w:1"></i></span></div>
+                <div class="pair__row"><span class="pair__label">GLM-5.3-Flash</span><span class="pair__value num">$0.60</span><span class="track" aria-hidden="true"><i class="bar bar--open" style="--w:.0667"></i></span></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="tier tier--out" id="not-covered">
+            <header class="tier__name">
+              <h2 class="tier__title">Not covered</h2>
+            </header>
+            <div class="tier__work">
+              <p class="tier__lead">Frontier security research: finding and exploiting vulnerabilities.</p>
+              <p class="tier__proof">It stays on gated frontier models. Routine security work, such as alert triage and log summaries, runs on the workhorse tier.</p>
+            </div>
+          </article>
+        </div>
+        <p class="tiers__fine">List prices read November 12–13, 2026, for the same number of tokens, before our fees. A coding task is 8 million input tokens, 94% of them read from cache, and 50,000 output; an agent's working day is 2 million input, 80% cached, and 60,000 output; a document page is 3,000 input and 300 output. Claude bills new input written to its cache at 1.25 times its input price. Work already on Claude Haiku 5.5's price for short prompts costs a quarter to a third more hosted; it moves for better agent results, data control or prompts over 100,000 tokens. Small open models for embeddings, reranking, guardrails and speech run beside every tier.</p>
+      </div>
+    </section>
+
+    <section class="section section--tint" id="your-bill">
+      <div class="wrap">
+        <header class="section-head">
+          <h2>Your bill, three ways.</h2>
+          <p>What a month of one workflow on Claude costs hosted, on servers you own, and after their four-year write-off. Hosted saves from the first month; owning pays once the bill passes a server's monthly cost.</p>
+        </header>
+
+        <div class="panel calc" data-calc>
+          <div class="seg calc__tiers js-only" role="radiogroup" aria-label="The work">
+            <label class="seg__opt"><input type="radio" name="calc-tier" value="coding" checked><span>Coding agents</span></label>
+            <label class="seg__opt"><input type="radio" name="calc-tier" value="agents"><span>Agents and support</span></label>
+            <label class="seg__opt"><input type="radio" name="calc-tier" value="docs"><span>Documents and voice</span></label>
+          </div>
+
+          <div class="calc__body">
+            <div class="calc__inputs">
+              <div class="calc__bill">
+                <label class="calc__label" for="calc-bill">Your Claude bill for this work</label>
+                <output class="calc__out" for="calc-bill"><span class="calc__amount" data-bill-out>$115,000</span> <span class="calc__per">a month</span></output>
+                <input class="calc__range js-only" id="calc-bill" type="range" min="0" max="1000" step="1" value="592" aria-valuetext="115,000 dollars a month" data-bill>
+                <div class="calc__scale js-only" aria-hidden="true"><span style="--at:0">$5K</span><span style="--at:.1308">$10K</span><span style="--at:.5654">$100K</span><span style="--at:1">$1M</span></div>
+                <p class="calc__basis" data-basis>On Claude Opus 5.5: about 200 heavy coding-agent users.</p>
+              </div>
+              <div class="calc__speed">
+                <div class="js-only" data-speed-pick>
+                  <p class="calc__label" id="calc-speed-label">Kimi server speed, output tokens a second</p>
+                  <div class="seg seg--sm" role="radiogroup" aria-labelledby="calc-speed-label">
+                    <label class="seg__opt"><input type="radio" name="calc-speed" value="1120" checked><span>1,100</span></label>
+                    <label class="seg__opt"><input type="radio" name="calc-speed" value="302"><span>300</span></label>
+                  </div>
+                  <p class="calc__note">Two measurements of Kimi on B300 servers disagree. We rent one and measure your traffic before you buy.</p>
+                </div>
+                <p class="calc__note" data-speed-fixed hidden></p>
+                <p class="calc__note no-js-only">Owned figures at 1,100 output tokens a second for each B300 server, the faster of two measurements of Kimi. At 300, the slower, the same team needs six servers: 7% less during the four-year write-off, 65% less after.</p>
+              </div>
+            </div>
+
+            <div class="calc__outputs">
+              <div class="calc__rows">
+                <div class="calc__row">
+                  <p class="calc__name" data-name="claude">Claude Opus 5.5</p>
+                  <p class="calc__fig"><span class="num" data-v="claude">$115,000</span></p>
+                  <span class="track" aria-hidden="true"><i class="bar bar--frontier" data-bar="claude" style="--w:1"></i></span>
+                </div>
+                <div class="calc__row">
+                  <p class="calc__name" data-name="hosted">Kimi K3.1 Pro, hosted</p>
+                  <p class="calc__fig"><span class="num" data-v="hosted">$69,500</span><span class="calc__pct" data-p="hosted">40% less</span></p>
+                  <span class="track" aria-hidden="true"><i class="bar bar--open" data-bar="hosted" style="--w:.6044"></i></span>
+                </div>
+                <div class="calc__row">
+                  <p class="calc__name">Your servers, years 1–4 <span class="nowrap" data-count>(2 × 8-GPU B300)</span></p>
+                  <p class="calc__fig"><span class="num" data-v="owned">$35,800</span><span class="calc__pct" data-p="owned">69% less</span></p>
+                  <span class="track" aria-hidden="true"><i class="bar bar--run is-joined" data-bar="owned-run" style="--w:.1165"></i><i class="bar bar--hw" data-bar="owned-hw" style="--x:.1165;--w:.1948"></i></span>
+                </div>
+                <div class="calc__row">
+                  <p class="calc__name">After the four-year write-off</p>
+                  <p class="calc__fig"><span class="num" data-v="after">$13,400</span><span class="calc__pct" data-p="after">88% less</span></p>
+                  <span class="track" aria-hidden="true"><i class="bar bar--run" data-bar="after" style="--w:.1165"></i></span>
+                </div>
+              </div>
+              <p class="calc__legend" aria-hidden="true"><span><i class="key key--run"></i>Power, colocation and support</span><span><i class="key key--hw"></i>Hardware, written off over four years</span></p>
+              <p class="calc__read" data-read aria-live="polite">Hosted saves $45,500 a month. Two servers save $79,200 a month during their four-year write-off and $101,600 a month after; their price is earned back in 11 months. The hosted move pays as long as switching costs each developer under 6 minutes a day.</p>
             </div>
           </div>
+
+          <p class="panel__note calc__fine">List prices read November 12–13, 2026, for the same number of tokens, before our fees. Servers at street prices, written off over four years, plus power at $0.10 a kWh, colocation and support; they are sized so the busiest hour uses two-thirds of their capacity, and overflow goes to the hosted route. <span data-fine>On Claude Sonnet 5.5, hosted Kimi costs about a fifth more per coding task; the saving there comes from owned servers or routine tasks on the workhorse tier. At 1.65 times Opus's tokens, the hosted saving is gone. Developer time at $120 an hour.</span></p>
         </div>
+      </div>
+    </section>
+
+    <section class="section routes">
+      <div class="wrap">
+        <header class="section-head">
+          <h2>Which route fits.</h2>
+        </header>
+        <dl class="rules routes__list">
+          <div class="rule"><dt>A hosted endpoint</dt><dd>The cheapest start for almost all work, and the right place for any tier whose bill is below one server's monthly cost.</dd></div>
+          <div class="rule"><dt>Servers you own</dt><dd>For coding agents at team scale, or any tier once its Claude bill passes one server's monthly cost: about $17,900 for frontier, $11,100 for workhorse and $7,000 for high-volume. Every request stays inside.</dd></div>
+          <div class="rule"><dt>Your cloud account</dt><dd>When the data must stay private while the load settles, or while your machines are on order.</dd></div>
+        </dl>
       </div>
     </section>
 
@@ -171,7 +255,7 @@
       </nav>
       <div class="foot__legal">
         <p>© 2026 ModusGen · modusgen.com</p>
-        <p>Cost figures are calculations from public list prices as of November 2026. They are not measurements and not guarantees.</p>
+        <p>Cost figures are calculations from public list prices and street server prices as of November 2026. They are not measurements and not guarantees.</p>
         <p>Our coding-agent setup uses the open-source agent OpenCode, unmodified; ModusGen is not affiliated with its maker. Company names and logos belong to their owners and show companies our engineers have worked with.</p>
       </div>
     </div>

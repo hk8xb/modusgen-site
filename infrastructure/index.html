@@ -21,9 +21,9 @@
   <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
   <link rel="preload" href="../assets/fonts/MonaSans-VF-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="../assets/css/site.css?v=70b93b6eb6">
+  <link rel="stylesheet" href="../assets/css/site.css?v=8c1dde1509">
   <script>document.documentElement.classList.add("js");</script>
-  <script type="module" src="../assets/js/main.js?v=70b93b6eb6"></script>
+  <script type="module" src="../assets/js/main.js?v=8c1dde1509"></script>
   
 </head>
 <body class="page--infrastructure">
@@ -83,7 +83,53 @@
       </div>
     </section>
 
-    <section class="section section--tint">
+    <section class="section section--tint" id="tiers">
+      <div class="wrap">
+        <header class="section-head">
+          <h2>What each tier runs on.</h2>
+          <p>The servers behind the owned figures on the <a href="../economics/">Economics</a> page, at street prices. We measure each model's speed on your own traffic before anything is ordered.</p>
+        </header>
+        <table class="spec spec--tiers">
+          <caption class="sr">The server each open-weight tier runs on, what one server carries, and what it costs a month</caption>
+          <thead>
+            <tr><th scope="col">Tier</th><th scope="col">Server</th><th scope="col">One server carries</th><th scope="col">A month, years 1–4 / after</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Frontier<span class="spec__sub">Sized on Kimi K3.1 Pro</span></th>
+              <td data-label="Server">8× NVIDIA B300, about $537,000, 14.5&nbsp;kW. Kimi's weights alone are 1.56&nbsp;TB, so nothing smaller holds it.</td>
+              <td data-label="One server carries">300 to 1,100 output tokens a second: about 35 to 125 heavy coding-agent users. Two measurements disagree, so we measure on yours.</td>
+              <td data-label="A month, years 1–4 / after"><span class="num">$17,900 / $6,700</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Workhorse<span class="spec__sub">Sized on DeepSeek V4.1 Flash</span></th>
+              <td data-label="Server">8× NVIDIA H200, about $318,000, 10.2&nbsp;kW, running two copies of the model.</td>
+              <td data-label="One server carries">About 2,500 output tokens a second, as NVIDIA measured it.</td>
+              <td data-label="A month, years 1–4 / after"><span class="num">$11,100 / $4,400</span></td>
+            </tr>
+            <tr>
+              <th scope="row">High-volume<span class="spec__sub">Sized on Qwen3.8 27B</span></th>
+              <td data-label="Server">8× NVIDIA RTX PRO 6000, about $170,000, 9.1&nbsp;kW: one copy of Qwen3.8 27B on each card, or GLM-5.3-Flash across all eight.</td>
+              <td data-label="One server carries">About 3,000 output tokens a second, our estimate.</td>
+              <td data-label="A month, years 1–4 / after"><span class="num">$7,000 / $3,500</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="sizing">
+          <div class="sizing__lead">
+            <h3 class="sizing__title">How many servers</h3>
+            <p>Sized from your busiest hour, not your average, with the rest of each month left for batch work.</p>
+          </div>
+          <div class="sizing__body">
+            <p class="sizing__rule">Servers = the busiest hour's output tokens a second ÷ (one server's speed × 0.67), rounded up.</p>
+            <p>Output is a small share of all tokens: about 0.6% for coding agents, 3% for employee agents, and 7 to 9% for chat and documents. For example, 200 heavy coding-agent users run about 190 billion tokens a month, and their busiest hour needs about 1,200 output tokens a second: two B300 servers at the faster speed, six at the slower. Overflow and failover go to a hosted endpoint.</p>
+            <p class="sizing__basis">A month covers the price written off over four years, power at $0.10 a kWh, colocation at $210 a kW-month and support at 5% of the price a year. After year four only power, colocation and support remain.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--ruled">
       <div class="wrap split">
         <div class="split__lead">
           <h2>A plain stack you own.</h2>
@@ -140,7 +186,7 @@
       </nav>
       <div class="foot__legal">
         <p>© 2026 ModusGen · modusgen.com</p>
-        <p>Cost figures are calculations from public list prices as of November 2026. They are not measurements and not guarantees.</p>
+        <p>Cost figures are calculations from public list prices and street server prices as of November 2026. They are not measurements and not guarantees.</p>
         <p>Our coding-agent setup uses the open-source agent OpenCode, unmodified; ModusGen is not affiliated with its maker. Company names and logos belong to their owners and show companies our engineers have worked with.</p>
       </div>
     </div>
