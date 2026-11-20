@@ -108,14 +108,48 @@ function ensureStacks() {
     });
     if (!stack) continue;
     el.dataset.live = "1";
-    if (mode === "hero" || mode === "story") stacks[mode] = stack;
+    if (mode === "hero" || mode === "story" || mode === "page") stacks[mode] = stack;
   }
 }
 ensureStacks();
 window.matchMedia("(max-width: 1000px)").addEventListener("change", () => {
   ensureStacks();
+  ensureKits();
   onScroll();
 });
+
+// ---------------------------------------------------------------- the platform page's paper objects
+
+// Loaded only where the page has them, carrying this script's version so a new build is fetched fresh.
+const kitEls = $$("[data-kit]");
+const kits = {};
+let createKit = null;
+if (kitEls.length) {
+  import(`./kit.js${new URL(import.meta.url).search}`).then((m) => {
+    createKit = m.createKit;
+    ensureKits();
+    onScroll();
+  });
+}
+function ensureKits() {
+  if (!createKit) return;
+  for (const el of kitEls) {
+    if (el.dataset.live) continue;
+    if (getComputedStyle(el).display === "none") continue;
+    const host = el.closest(".story__stage");
+    if (host && getComputedStyle(host).display === "none") continue;
+    const mode = el.dataset.kit;
+    const kit = createKit(el, {
+      mode,
+      piece: el.dataset.kitPiece || null,
+      reduceMotion: reduce,
+      pointerArea: mode === "stage" ? el.closest("[data-spotlight]") : el,
+    });
+    if (!kit) continue;
+    el.dataset.live = "1";
+    if (mode === "stage") kits.stage = kit;
+  }
+}
 
 // ---------------------------------------------------------------- the story: one figure from the hero through the tour
 
@@ -169,6 +203,188 @@ function updateProcess(vh) {
   stepItems.forEach((s, i) => s.classList.toggle("is-on", p > i / stepItems.length + 0.015));
 }
 
+// ---------------------------------------------------------------- the platform page: one object per piece
+
+// Each piece of software is a beat. The pinned figure follows the reading line, a little above the
+// middle of the screen, as it passes from the opening to each piece's middle: -1 shows all six objects,
+// 0 to 5 one object each, and in between the old one lifts away as the next drops in (the figure holds
+// each beat for a while: a soft lock). The piece nearest the line is marked in the list under the
+// figure; the one already marked keeps a margin before the next takes over, so it settles, not flickers.
+const spotlight = $("[data-spotlight]");
+const pieces = spotlight ? $$("[data-spot]", spotlight) : [];
+const spotMarks = $$("[data-spot-mark]");
+const spotStage = spotlight ? $("[data-spot-stage]", spotlight) : null;
+const spotOpening = spotlight ? $(".soft-hero", spotlight) : null;
+let spotIndex = -1;
+function updateSpot(vh) {
+  if (!pieces.length) return;
+  const line = vh * 0.46;
+  if (kits.stage) {
+    const beats = [spotOpening, ...pieces].filter(Boolean);
+    const centres = beats.map((el) => {
+      const r = el.getBoundingClientRect();
+      return r.top + r.height / 2;
+    });
+    const last = centres.length - 1;
+    let pos = line >= centres[last] ? last : 0;
+    for (let k = 0; k < last; k++) {
+      if (line < centres[k + 1]) {
+        pos = k + clamp((line - centres[k]) / (centres[k + 1] - centres[k]));
+        break;
+      }
+    }
+    const shift = spotOpening ? 1 : 0;
+    kits.stage.setPos((reduce ? Math.round(pos) : pos) - shift);
+  }
+  let best = -1;
+  let bestD = Infinity;
+  pieces.forEach((el, i) => {
+    const r = el.getBoundingClientRect();
+    const d = Math.abs(r.top + r.height / 2 - line) - (i === spotIndex ? r.height * 0.2 : 0);
+    if (d < bestD) {
+      bestD = d;
+      best = i;
+    }
+  });
+  if (pieces[0].getBoundingClientRect().top > vh * 0.78) best = -1;
+  if (best === spotIndex) return;
+  spotIndex = best;
+  const el = best >= 0 ? pieces[best] : null;
+  pieces.forEach((p, i) => p.classList.toggle("is-on", i === best));
+  for (const m of spotMarks) {
+    const on = el != null && m.dataset.spotMark === el.id;
+    m.classList.toggle("is-on", on);
+    if (on) m.setAttribute("aria-current", "true");
+    else m.removeAttribute("aria-current");
+  }
+  if (spotStage) spotStage.classList.toggle("is-tour", best >= 0);
+}
+
+// pieces rise into place the first time they are seen; their ticks follow one by one
+for (const el of $$("[data-reveal]")) whenSeenLater(el);
+function whenSeenLater(el) {
+  if (reduce || !("IntersectionObserver" in window)) {
+    el.classList.add("is-in");
+    return;
+  }
+  const io = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      el.classList.add("is-in");
+    },
+    { threshold: 0.2, rootMargin: "0px 0px -8% 0px" }
+  );
+  io.observe(el);
+}
+
+// ---------------------------------------------------------------- the platform page: one call, end to end
+
+// Played once when first seen. The playhead holds at the start while the call hops from the agent to
+// the gateway to vLLM, sweeps to the last token, then holds while the answer goes back up and the
+// team's totals tick over. Each moment's label and its record lines come up as the call reaches them.
+const trace = $("[data-trace]");
+if (trace) {
+  const call = trace.closest(".call") || document;
+  const evs = Object.fromEntries($$("[data-ev]", trace).map((el) => [el.dataset.ev, el]));
+  const lines = $$(".jl", call);
+  const nums = $$(".tn", call);
+  const laneEls = $$(".lane__track", trace);
+  const nowEl = $(".trace__now", trace);
+  const END = 6120;
+  // [seconds into the play, the lane the call is on, the moments that come up]
+  const BEATS = [
+    [0.05, 0, ["sent"]],
+    [0.4, 1, ["check"]],
+    [0.72, 2, ["out"]],
+    [3.5, 1, ["record"]],
+    [3.8, 0, ["shown"]],
+    [4.1, 3, ["totals", "back"]],
+  ];
+  const SWEEP = [0.8, 3.35];
+  const laneY = (k) => laneEls[k].offsetTop + (window.matchMedia("(max-width: 760px)").matches ? 38 : 47);
+
+  // the call's path, drawn down the lanes it crosses: at the start agent to vLLM, at the end all four
+  const hops = Object.fromEntries($$("[data-hop]", trace).map((el) => [el.dataset.hop, el]));
+  const placeHops = () => {
+    for (const [name, el] of Object.entries(hops)) {
+      const ys = (name === "out" ? [0, 1, 2] : [0, 1, 2, 3]).map(laneY);
+      const top = Math.min(...ys);
+      el.style.top = top + "px";
+      el.style.height = Math.max(...ys) - top + "px";
+      el.innerHTML = ys.map((y) => '<i style="top: ' + (y - top) + 'px"></i>').join("");
+    }
+  };
+  placeHops();
+  window.addEventListener("resize", placeHops, { passive: true });
+
+  const countUp = () => {
+    for (const n of nums) {
+      const from = Number(n.textContent);
+      const to = Number(n.dataset.to);
+      const start = performance.now();
+      n.classList.add("is-hit");
+      const tick = (now) => {
+        const t = clamp((now - start) / 700);
+        n.textContent = String(Math.round(from + (to - from) * easeOutExpo(t)));
+        if (t < 1) requestAnimationFrame(tick);
+        else setTimeout(() => n.classList.remove("is-hit"), 900);
+      };
+      requestAnimationFrame(tick);
+    }
+  };
+  const moment = (id) => {
+    if (evs[id]) evs[id].classList.add("is-on");
+    if (hops[id]) hops[id].classList.add("is-on");
+    for (const l of lines) {
+      if (l.dataset.at !== id) continue;
+      l.classList.add("is-on", "is-hit");
+      setTimeout(() => l.classList.remove("is-hit"), 650);
+    }
+    if (id === "totals") countUp();
+  };
+
+  whenSeen(
+    trace,
+    () => {
+      if (reduce) {
+        trace.style.setProperty("--now", END);
+        Object.keys(evs).forEach((id) => evs[id].classList.add("is-on"));
+        Object.values(hops).forEach((el) => el.classList.add("is-on"));
+        lines.forEach((l) => l.classList.add("is-on"));
+        nums.forEach((n) => (n.textContent = n.dataset.to));
+        return;
+      }
+      trace.style.setProperty("--dot-y", `${laneY(0)}px`);
+      trace.classList.add("is-playing");
+      const t0 = performance.now();
+      let beat = 0;
+      let first = false;
+      const frame = (now) => {
+        const t = (now - t0) / 1000;
+        const u = clamp((t - SWEEP[0]) / (SWEEP[1] - SWEEP[0]));
+        const ms = END * (u < 0.5 ? 2 * u * u : 1 - Math.pow(2 - 2 * u, 2) / 2);
+        trace.style.setProperty("--now", ms.toFixed(1));
+        nowEl.textContent = `${(ms / 1000).toFixed(2)} s`;
+        if (!first && ms >= 380) {
+          first = true;
+          moment("first");
+        }
+        while (beat < BEATS.length && t >= BEATS[beat][0]) {
+          const [, lane, ids] = BEATS[beat];
+          trace.style.setProperty("--dot-y", `${laneY(lane)}px`);
+          ids.forEach(moment);
+          beat++;
+        }
+        if (t < 5) requestAnimationFrame(frame);
+        else trace.classList.remove("is-playing");
+      };
+      requestAnimationFrame(frame);
+    },
+    0.45
+  );
+}
+
 // ---------------------------------------------------------------- one scroll loop
 
 const hero = $(".hero");
@@ -184,6 +400,7 @@ function onScroll() {
     if (stacks.hero && hero) stacks.hero.setExplode(clamp(y / (hero.offsetHeight * 0.75)));
     updateStory(vh);
     updateProcess(vh);
+    updateSpot(vh);
   });
 }
 window.addEventListener("scroll", onScroll, { passive: true });

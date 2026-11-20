@@ -1093,11 +1093,11 @@ textarea {
   background: var(--bg-1);
 }
 
-/* Screens: tool output and the portal preview stay dark, like a display set into the page. */
+/* Screens: tool output stays dark, like a display set into the page. The SEI dashboard
+   preview (.console) is paper, like the portal it shows. */
 .mini-term,
 .term,
-.record,
-.console {
+.record {
   --bg-1: #1a1611;
   --bg-2: #221d17;
   --bg-3: #2e281f;
@@ -1177,7 +1177,7 @@ textarea {
   grid-column: span 8;
 }
 
-/* the home page's glance at the SEI dashboard: three columns, no switcher */
+/* the home page's glance at the SEI dashboard: four columns, no opening sentence */
 .console--mini {
   align-self: stretch;
   margin-top: 22px;
@@ -1192,30 +1192,10 @@ textarea {
   padding-block: 9px;
 }
 
-@media (max-width: 560px) {
-  .console--mini .console__table thead th {
-    white-space: normal;
-  }
-
-  .console--mini .console__table tr > :first-child {
-    padding-left: 16px;
-  }
-
-  .console--mini .console__table tr > :last-child {
-    padding-right: 16px;
-  }
-
-  .console--mini .meter {
-    width: 36px;
-    margin-right: 8px;
-  }
-}
-
-/* the narrowest phones keep the percentages and drop the little bars */
-@media (max-width: 420px) {
-  .console--mini .meter {
-    display: none;
-  }
+/* its column heads are long for a narrow panel, so they may take two lines */
+.console--mini .console__table thead th {
+  padding-top: 12px;
+  white-space: normal;
 }
 
 @media (max-width: 1000px) {
@@ -1244,6 +1224,14 @@ textarea {
 
 .term__tabs::-webkit-scrollbar {
   display: none;
+}
+
+/* on a phone the three tabs wrap rather than run off the edge with no sign there is more */
+@media (max-width: 560px) {
+  .term__tabs {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
 }
 
 .term__tab {
@@ -1407,13 +1395,14 @@ textarea {
   color: var(--ink);
 }
 
-/* console preview */
+/* console preview: the portal's SEI dashboard in miniature, on paper like the portal. An
+   opening sentence, then a ledger: heads on a strong rule, figures in mono, meters in blue. */
 
 .console__bar {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 12px 20px 12px 24px;
+  padding: 12px 24px;
   border-bottom: 1px solid var(--line);
 }
 
@@ -1431,27 +1420,41 @@ textarea {
   fill: currentColor;
 }
 
-.console__seg {
-  display: inline-flex;
-  padding: 2px;
-  border-radius: var(--r-2);
-  background: var(--wash);
+/* the period, where the portal keeps its period choice */
+.console__period {
+  margin-left: auto;
   color: var(--ink-3);
   font-size: 0.8125rem;
+  white-space: nowrap;
 }
 
-.console__seg span {
-  padding: 4px 10px;
-  border-radius: var(--r-1);
+/* the portal's result sentence and provenance line, at the panel's scale */
+.console__head {
+  padding: 22px 24px 8px;
 }
 
-.console__seg .is-on {
-  background: var(--bg-3);
+.console__result {
+  max-width: 30em;
+  color: var(--ink-2);
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* a figure in a heading keeps Mona Sans: in the mono face the comma leaves a gap */
+.console__result .fig {
   color: var(--ink);
+  font-variant-numeric: proportional-nums lining-nums;
+  white-space: nowrap;
 }
 
-.console__flag {
-  margin-left: auto;
+.console__prov {
+  margin-top: 6px;
+  color: var(--ink-3);
+  font-size: 0.8125rem;
+  line-height: 1.5;
 }
 
 .console__scroll {
@@ -1469,10 +1472,11 @@ textarea {
 
 .console__table th,
 .console__table td {
-  padding: 12px 10px;
+  padding: 10px;
   border-bottom: 1px solid var(--line);
   text-align: left;
   white-space: nowrap;
+  vertical-align: baseline;
 }
 
 .console__table tr > :first-child {
@@ -1488,19 +1492,33 @@ textarea {
 }
 
 .console__table thead th {
+  padding-top: 14px;
+  padding-bottom: 8px;
+  border-bottom-color: var(--line-2);
   color: var(--ink-3);
-  font-size: 0.78125rem;
+  font-size: 0.8125rem;
   font-weight: 400;
+  vertical-align: bottom;
 }
 
 .console__table tbody th {
   font-weight: 500;
 }
 
+/* a lead cell's sub-line, such as the small teams folded together */
+.console__table th small {
+  display: block;
+  color: var(--ink-3);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.4;
+  white-space: normal;
+}
+
 .console__table td {
   color: var(--ink-2);
   font-family: var(--mono);
-  font-size: 0.78125rem;
+  font-size: 0.8125rem;
 }
 
 .console__table tbody tr:last-child > * {
@@ -1515,15 +1533,16 @@ textarea {
   font-weight: 500;
 }
 
+/* a meter: the figure, then a short blue bar on a brown track, as in the portal */
 .meter {
   display: inline-block;
-  width: 48px;
-  height: 4px;
-  margin-right: 10px;
+  width: 56px;
+  height: 6px;
+  margin-left: 10px;
   overflow: hidden;
   border-radius: 1px;
   background: var(--track);
-  vertical-align: 0.15em;
+  vertical-align: 0.12em;
 }
 
 .meter i {
@@ -1540,19 +1559,66 @@ textarea {
 }
 
 @media (max-width: 640px) {
-  .console__seg {
-    display: none;
+  .console__bar {
+    padding-inline: 16px;
+  }
+
+  .console__head {
+    padding: 18px 16px 6px;
+  }
+
+  .console__result {
+    font-size: 1.125rem;
   }
 
   .console__table {
     min-width: 0;
   }
 
-  /* on a phone the full table keeps team, weekly activity and AI-assisted PRs */
-  .console:not(.console--mini) .console__table tr > :nth-child(3),
-  .console:not(.console--mini) .console__table tr > :nth-child(5),
-  .console:not(.console--mini) .console__table tr > :nth-child(6) {
+  .console__table thead th {
+    white-space: normal;
+  }
+
+  .console__table tr > :first-child {
+    padding-left: 16px;
+  }
+
+  .console__table tr > :last-child {
+    padding-right: 16px;
+  }
+
+  /* on a phone the full table keeps team, weekly activity, PRs with agent work and cost */
+  .console:not(.console--mini) .console__table tr > :nth-child(4),
+  .console:not(.console--mini) .console__table tr > :nth-child(5) {
     display: none;
+  }
+}
+
+/* phones narrow the little bars; the narrowest keep only the percentages and tighten the
+   columns, so the four that remain fit without scrolling */
+@media (max-width: 560px) {
+  .console .meter {
+    width: 36px;
+    margin-left: 8px;
+  }
+}
+
+@media (max-width: 420px) {
+  .console .meter {
+    display: none;
+  }
+
+  .console__table th,
+  .console__table td {
+    padding-inline: 7px;
+  }
+
+  .console__table thead th {
+    font-size: 0.75rem;
+  }
+
+  .console__table th small {
+    max-width: 7rem;
   }
 }
 
@@ -2840,6 +2906,540 @@ html:not(.js) .step::before {
 @media (max-width: 700px) {
   .foot__grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ------------------------------------------------------------------ platform: six pieces, each its own paper object */
+
+.soft-hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: calc(86svh - var(--nav));
+  padding-block: 32px 48px;
+}
+
+.soft-hero .page-hero__title {
+  max-width: 11em;
+}
+
+.soft-hero .hero__actions {
+  margin-top: 32px;
+}
+
+/* the paper objects: the pinned frame holds one at a time; on a phone the opening shows all six and
+   each piece carries its own */
+.kit {
+  position: relative;
+  width: 100%;
+}
+
+.kit canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.kit--stage {
+  height: 100%;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 5%, #000 95%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 5%, #000 95%, transparent 100%);
+}
+
+.kit--lineup,
+.kit--solo {
+  display: none;
+}
+
+.pieces {
+  padding-bottom: clamp(48px, 7vw, 112px);
+}
+
+/* each piece gets most of a screen, so the figure can settle on it before the next one arrives */
+.piece {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  max-width: 30rem;
+  min-height: 68vh;
+  padding-block: 7vh;
+  border-top: 1px solid var(--line);
+}
+
+/* the piece being read: a short ink rule draws in just above its title, and the title comes up to full ink */
+.piece__title::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 0;
+  width: 72px;
+  height: 1px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.9s var(--ease);
+}
+
+.piece.is-on .piece__title::before {
+  transform: scaleX(1);
+}
+
+.piece__title {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 14px;
+  font-size: clamp(1.5rem, 1vw + 1.15rem, 2rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  transition: color 0.5s var(--ease);
+}
+
+.js .piece__title {
+  color: var(--ink-2);
+}
+
+.js .piece.is-on .piece__title {
+  color: var(--ink);
+}
+
+.piece__title .flag {
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* a status, not data: its marker stays ink, so the blue lit block in the figure is never read as its legend */
+.piece__title .flag::before {
+  background: var(--ink-3);
+}
+
+.piece > p {
+  margin-top: 14px;
+  color: var(--ink-2);
+  font-size: 1.0625rem;
+}
+
+.piece .ticks {
+  margin-top: 20px;
+}
+
+/* the six pieces under the figure, as links; they wrap on narrower screens */
+.spot__nav {
+  flex-wrap: wrap;
+  padding-inline: 12px;
+}
+
+/* each piece is already readable as it arrives and settles once into place; its ticks follow one by one.
+   The figure stays the page's one authored moment, so this is kept quiet. */
+.js [data-reveal] {
+  opacity: 0.5;
+  transform: translateY(14px);
+  transition: opacity 0.8s var(--ease), transform 1s var(--ease);
+}
+
+.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.js [data-reveal] .ticks li {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.6s var(--ease), transform 0.7s var(--ease);
+  transition-delay: calc(var(--i, 0) * 70ms + 240ms);
+}
+
+.js [data-reveal].is-in .ticks li {
+  opacity: 1;
+  transform: none;
+}
+
+[data-reveal] .ticks li:nth-child(2) {
+  --i: 1;
+}
+
+[data-reveal] .ticks li:nth-child(3) {
+  --i: 2;
+}
+
+[data-reveal] .ticks li:nth-child(4) {
+  --i: 3;
+}
+
+[data-reveal] .ticks li:nth-child(5) {
+  --i: 4;
+}
+
+@media (max-width: 1000px) {
+  .soft-hero {
+    min-height: 0;
+    padding-block: 40px 8px;
+  }
+
+  /* on a phone all six objects sit in the opening, between the offer and the buttons, and each piece
+     shows its own under its words */
+  .kit--lineup {
+    display: block;
+    aspect-ratio: 1.1 / 1;
+    max-height: 60vh;
+    margin-top: 20px;
+  }
+
+  .kit--solo {
+    display: block;
+    aspect-ratio: 1.5 / 1;
+    margin-top: 18px;
+  }
+
+  .piece {
+    min-height: 0;
+    max-width: 40rem;
+    padding-block: 40px;
+  }
+}
+
+/* ------------------------------------------------------------------ platform: one call, end to end */
+
+/* A timeline of one coding-agent call, lane by lane, drawn from the gateway's record. Times are in
+   milliseconds out of --span. When it is first seen a playhead sweeps it and the call rides along as a
+   blue dot, hopping from lane to lane; each moment's label and its record lines come up as it passes. */
+.trace {
+  --span: 6500;
+  --name: 9.5rem;
+  --gap: 20px;
+  --tpad: clamp(16px, 2.4vw, 28px);
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  background: var(--bg-1);
+}
+
+.trace__bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px 24px;
+  padding: 14px var(--tpad);
+  border-bottom: 1px solid var(--line);
+}
+
+.trace__who {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 10px;
+  color: var(--ink-2);
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+}
+
+.trace__who span + span::before {
+  content: "·";
+  margin-right: 10px;
+  color: var(--ink-3);
+}
+
+.trace__plot {
+  position: relative;
+  padding: 4px var(--tpad) 10px;
+}
+
+.trace__lanes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lane {
+  display: grid;
+  grid-template-columns: var(--name) minmax(0, 1fr);
+  column-gap: var(--gap);
+  align-items: center;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--line);
+}
+
+.lane__name {
+  color: var(--ink-2);
+  font-size: 0.875rem;
+}
+
+.lane__track {
+  position: relative;
+  height: 64px;
+}
+
+.span,
+.lane__wait {
+  position: absolute;
+  left: calc(var(--a) / var(--span) * 100%);
+  width: calc((var(--b) - var(--a)) / var(--span) * 100%);
+}
+
+.span {
+  top: 42px;
+  height: 10px;
+  background: var(--accent);
+  transform-origin: left center;
+}
+
+/* waiting for the first token, set apart from the tokens that follow it */
+.span--first {
+  background: var(--accent-hi);
+}
+
+.lane__wait {
+  top: 46px;
+  border-top: 1px dashed var(--line-2);
+}
+
+.ev {
+  position: absolute;
+  left: calc(var(--t) / var(--span) * 100%);
+  top: 13px;
+  padding-left: 9px;
+  color: var(--ink-2);
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* each moment is a fine ink tick, from its label down to the lane's line */
+.ev::before {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 0;
+  width: 1px;
+  height: 38px;
+  background: var(--ink);
+  opacity: 0.5;
+}
+
+.ev--end {
+  padding: 0 9px 0 0;
+  transform: translateX(-100%);
+}
+
+.ev--end::before {
+  right: 0;
+  left: auto;
+}
+
+.trace__axis {
+  position: relative;
+  height: 30px;
+  margin-left: calc(var(--name) + var(--gap));
+  color: var(--ink-3);
+  font: 400 0.75rem/1 var(--mono);
+}
+
+.trace__axis span {
+  position: absolute;
+  top: 12px;
+  left: calc(var(--t) / var(--span) * 100%);
+  transform: translateX(-50%);
+}
+
+.trace__axis span:first-child {
+  transform: none;
+}
+
+/* the playhead, and the call riding it */
+.trace__cursor,
+.trace__dot {
+  position: absolute;
+  left: calc(var(--tpad) + var(--name) + var(--gap) + (100% - 2 * var(--tpad) - var(--name) - var(--gap)) * var(--now, 0) / var(--span));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s var(--ease);
+}
+
+.trace__cursor {
+  top: 4px;
+  bottom: 40px;
+  width: 1px;
+  background: var(--ink);
+}
+
+.trace__now {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 6px;
+  padding: 2px 5px;
+  transform: translateX(-50%);
+  background: var(--bg-1);
+  color: var(--ink);
+  font: 500 0.75rem/1 var(--mono);
+  white-space: nowrap;
+}
+
+.trace__dot {
+  top: var(--dot-y, 47px);
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  border-radius: 50%;
+  background: var(--accent);
+  transition: opacity 0.4s var(--ease), top 0.26s var(--ease);
+}
+
+.trace.is-playing .trace__cursor,
+.trace.is-playing .trace__dot {
+  opacity: 1;
+}
+
+/* the call's path, kept once it has played: down from the agent to vLLM at the start; back up, and on
+   to the team's totals, at the end. A fine blue line with a dot on each lane it crosses */
+.hop {
+  position: absolute;
+  left: calc(var(--tpad) + var(--name) + var(--gap) + (100% - 2 * var(--tpad) - var(--name) - var(--gap)) * var(--t) / var(--span) + var(--nudge, 0px));
+  width: 1px;
+  background: rgba(35, 70, 174, 0.45);
+  pointer-events: none;
+}
+
+.hop i {
+  position: absolute;
+  left: -3px;
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.js .trace .hop {
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+
+.js .trace .hop.is-on {
+  opacity: 1;
+}
+
+/* until it plays, each moment waits unlabelled and each span unfilled */
+.js .trace .ev {
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+}
+
+.js .trace .ev.is-on {
+  opacity: 1;
+}
+
+.js .trace .span {
+  transform: scaleX(clamp(0, (var(--now, 0) - var(--a)) / (var(--b) - var(--a)), 1));
+}
+
+.call__below {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.call__below .record {
+  grid-column: span 7;
+}
+
+.call__below .totals {
+  grid-column: span 5;
+}
+
+.record__json .t-cmd {
+  color: var(--ink);
+}
+
+.record__json .t-ps {
+  color: var(--ink-3);
+}
+
+/* the record's lines come up as the call reaches them, each lit briefly as it lands */
+.js .call .jl {
+  opacity: 0.38;
+  transition: opacity 0.5s var(--ease), background-color 0.9s var(--ease);
+}
+
+.js .call .jl.is-on {
+  opacity: 1;
+}
+
+.js .call .jl.is-hit {
+  background-color: rgba(111, 155, 255, 0.16);
+  transition: opacity 0.5s var(--ease), background-color 0s;
+}
+
+.record__json .tn {
+  font-weight: 400;
+  transition: color 0.8s var(--ease);
+}
+
+.record__json .tn.is-hit {
+  color: var(--accent);
+}
+
+@media (max-width: 900px) {
+  .call__below .record,
+  .call__below .totals {
+    grid-column: 1 / -1;
+  }
+}
+
+/* on a phone each lane's name sits above its timeline */
+@media (max-width: 760px) {
+  .trace {
+    --name: 0px;
+    --gap: 0px;
+  }
+
+  .lane {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 12px;
+  }
+
+  .lane__name {
+    font-size: 0.8125rem;
+  }
+
+  .lane__track {
+    height: 58px;
+  }
+
+  .ev {
+    top: 8px;
+    font-size: 0.75rem;
+  }
+
+  .ev::before {
+    height: 34px;
+  }
+
+  .span {
+    top: 34px;
+    height: 8px;
+  }
+
+  .lane__wait {
+    top: 38px;
+  }
+
+  .trace__axis span:nth-child(even) {
+    display: none;
+  }
+
+  /* the command is broken by hand into short lines; a touch smaller on a phone so none of them wraps,
+     and if one still would, it wraps rather than running off the screen */
+  .totals .record__json {
+    font-size: 0.75rem;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
   }
 }
 

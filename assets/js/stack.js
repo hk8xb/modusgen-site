@@ -1,6 +1,7 @@
 // The three-layer figure: organisation over software over hardware.
 // Drawn on a 2D canvas with a small isometric engine, as sheets of thick, clean
 // handmade paper with torn, fuzzy edges, lit from the upper left. No dependencies.
+// The Platform page's paper objects (kit.js) borrow its palette and paper helpers.
 //
 // World units: each sheet is P wide and P + BAND deep, lying in the x/y plane; z points up.
 // The front BAND of every sheet is kept clear for the layer's name.
@@ -13,7 +14,7 @@ const CY = (P + BAND) / 2;
 const PLATE_T = 0.3;
 const SEAT = 0.62;
 const SEAT_PITCH = 0.84;
-const SANS = '"Mona Sans", ui-sans-serif, system-ui, sans-serif';
+export const SANS = '"Mona Sans", ui-sans-serif, system-ui, sans-serif';
 
 // A request drops through the organisation sheet at a port, lands on the Model API bar
 // (which runs along GATE_Y), rides it to a GPU's column and drops through a hole to that GPU.
@@ -29,7 +30,7 @@ const INDEX = { hardware: 0, software: 1, organisation: 2, infrastructure: 0, pl
 
 // ---------------------------------------------------------------- palette
 
-const C = {
+export const C = {
   // the three sheets, bottom to top: clean white stock, each a shade brighter nearer the light
   sheet: [
     [240, 238, 232],
@@ -65,21 +66,21 @@ const C = {
 };
 
 // how each kind of block is cut: from white card, graphite card or blue card
-const CARD = { top: C.card, lit: C.cardLit, shade: C.cardShade, edge: "rgba(255, 255, 255, 0.9)", fuzz: "rgba(255, 255, 255, 0.9)", grain: 0.8, text: C.label };
-const COAL = { top: C.coal, lit: C.coalLit, shade: C.coalShade, edge: "rgba(255, 255, 255, 0.16)", fuzz: "rgba(150, 150, 156, 0.55)", grain: 0.1, text: "rgba(246, 241, 232, 0.9)" };
-const BLUE = { top: C.blue, lit: C.blueLit, shade: C.blueShade, edge: "rgba(255, 255, 255, 0.32)", fuzz: "rgba(156, 180, 240, 0.65)", grain: 0.14, text: "rgba(248, 245, 238, 0.95)" };
+export const CARD = { top: C.card, lit: C.cardLit, shade: C.cardShade, edge: "rgba(255, 255, 255, 0.9)", fuzz: "rgba(255, 255, 255, 0.9)", grain: 0.8, text: C.label };
+export const COAL = { top: C.coal, lit: C.coalLit, shade: C.coalShade, edge: "rgba(255, 255, 255, 0.16)", fuzz: "rgba(150, 150, 156, 0.55)", grain: 0.1, text: "rgba(246, 241, 232, 0.9)" };
+export const BLUE = { top: C.blue, lit: C.blueLit, shade: C.blueShade, edge: "rgba(255, 255, 255, 0.32)", fuzz: "rgba(156, 180, 240, 0.65)", grain: 0.14, text: "rgba(248, 245, 238, 0.95)" };
 
-const rgb = (c, a = 1) => `rgba(${c[0] | 0}, ${c[1] | 0}, ${c[2] | 0}, ${a})`;
-const mix = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
-const clamp = (v, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v));
-const easeOutExpo = (t) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t));
-const easeOutCubic = (t) => 1 - Math.pow(1 - clamp(t), 3);
-const smooth = (t) => t * t * (3 - 2 * t);
-const smoothstep = (a, b, x) => smooth(clamp((x - a) / (b - a)));
+export const rgb = (c, a = 1) => `rgba(${c[0] | 0}, ${c[1] | 0}, ${c[2] | 0}, ${a})`;
+export const mix = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+export const clamp = (v, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, v));
+export const easeOutExpo = (t) => (t >= 1 ? 1 : 1 - Math.pow(2, -10 * t));
+export const easeOutCubic = (t) => 1 - Math.pow(1 - clamp(t), 3);
+export const smooth = (t) => t * t * (3 - 2 * t);
+export const smoothstep = (a, b, x) => smooth(clamp((x - a) / (b - a)));
 
 // The home page's story: 0 the hero, 1 the overview, 2 to 4 each layer in turn. Scrolling moves it
 // live, but each beat holds still for the first and last fifth of the way to the next: a soft lock.
-const softLock = (s) => {
+export const softLock = (s) => {
   const k = Math.floor(s);
   return k + smoothstep(0.2, 0.8, s - k);
 };
@@ -92,12 +93,12 @@ function storyState(s) {
 // what the overview says beside each sheet; "|" marks where a note prefers to break
 const CALLOUTS = [
   ["Infrastructure", "GPUs in your cloud|or on-prem"],
-  ["Platform", "Model API, coding agents|and the SEI dashboard"],
+  ["Platform", "Model gateway, agents|and the company portal"],
   ["Organization", "Rollout, policy|and training"],
 ];
 
 // A seeded random source, so every visit tears the paper the same way.
-function rng(seed) {
+export function rng(seed) {
   let a = seed >>> 0;
   return () => {
     a = (a + 0x6d2b79f5) | 0;
@@ -107,14 +108,14 @@ function rng(seed) {
   };
 }
 
-function hash(text) {
+export function hash(text) {
   let h = 2166136261;
   for (let i = 0; i < text.length; i++) h = Math.imul(h ^ text.charCodeAt(i), 16777619);
   return h >>> 0;
 }
 
 // Smooth noise around a loop (t from 0 to 1), so a torn edge closes on itself.
-function loop(r, n) {
+export function loop(r, n) {
   const v = Array.from({ length: n }, () => r() * 2 - 1);
   return (t) => {
     const x = (((t % 1) + 1) % 1) * n;
@@ -128,11 +129,11 @@ function loop(r, n) {
 // ---------------------------------------------------------------- paper grain
 
 // One tile of pulp and fibres, laid over every sheet and block. Made once per page.
-const GRAIN_N = 512;
-const GRAIN_WORLD = 13; // world units one tile covers
+export const GRAIN_N = 512;
+export const GRAIN_WORLD = 13; // world units one tile covers
 let grainTile = null;
 
-function paperGrain() {
+export function paperGrain() {
   if (grainTile) return grainTile;
   const N = GRAIN_N;
   const tile = document.createElement("canvas");
@@ -244,7 +245,7 @@ function paperGrain() {
 
 // ---------------------------------------------------------------- the world
 
-function roundedRect(x, y, w, d, r, n = 4) {
+export function roundedRect(x, y, w, d, r, n = 4) {
   r = Math.min(r, w / 2, d / 2);
   const corners = [
     [x + w - r, y + r, -Math.PI / 2],
@@ -263,7 +264,7 @@ function roundedRect(x, y, w, d, r, n = 4) {
 }
 
 // Evenly spaced points around a convex outline, each with its outward normal.
-function resample(pts, ds) {
+export function resample(pts, ds) {
   const n = pts.length;
   const seg = [];
   let per = 0;
@@ -311,7 +312,7 @@ function resample(pts, ds) {
 }
 
 // A strand standing off an edge point (x, y) with outward normal (nx, ny): [x0, y0, x1, y1].
-function strand(r, x, y, nx, ny, spread, len, root) {
+export function strand(r, x, y, nx, ny, spread, len, root) {
   const ang = (r() - 0.5) * spread;
   const ca = Math.cos(ang);
   const sa = Math.sin(ang);
@@ -364,7 +365,7 @@ function tornSheet(seed) {
 }
 
 // Short loose fibres standing off the cut edge of a block.
-function edgeFuzz(outline, seed, count) {
+export function edgeFuzz(outline, seed, count) {
   const r = rng(seed);
   const pts = resample(outline, 0.04);
   const out = [];
@@ -430,22 +431,26 @@ function buildWorld() {
   const software = {
     title: "Platform",
     boxes: [
-      box("agents", "Coding agents", 1.0, 3.6, 4.6, 4.0, 0.45),
-      box("sei", "SEI dashboard", 6.4, 3.6, 4.6, 4.0, 0.45),
-      box("gateway", "Model API", 1.0, 9.2, 10.0, 1.8, 0.5, "bar"),
+      box("agents", "Coding agents", 1.0, 3.6, 3.1, 4.0, 0.45),
+      box("assistant", "Company agent", 4.45, 3.6, 3.1, 4.0, 0.45),
+      box("portal", "Portal", 7.9, 3.6, 3.1, 4.0, 0.45),
+      box("gateway", "Model gateway", 1.0, 9.2, 10.0, 1.8, 0.5, "bar"),
     ],
-    // the agents call the Model API; its usage records feed the dashboard; frontier calls leave at its end
+    // both agents call the gateway; its usage records feed the portal; frontier calls leave at its end
     traces: [
-      [[2.3, 7.6], [2.3, 9.2]],
-      [[4.3, 7.6], [4.3, 9.2]],
-      [[7.7, 9.2], [7.7, 7.6]],
-      [[9.7, 9.2], [9.7, 7.6]],
+      [[2.0, 7.6], [2.0, 9.2]],
+      [[3.1, 7.6], [3.1, 9.2]],
+      [[5.45, 7.6], [5.45, 9.2]],
+      [[6.55, 7.6], [6.55, 9.2]],
+      [[8.9, 9.2], [8.9, 7.6]],
+      [[10.0, 9.2], [10.0, 7.6]],
       [[11.05, GATE_Y], [11.85, GATE_Y]],
     ],
     // holes through the Model API bar and the sheet, one over each GPU
     holes: SLED_X.map((x) => ({ x, y: GATE_Y, ping: 0 })),
     meter: [0.35, 0.55, 0.42, 0.7, 0.5, 0.62],
     code: new Array(5).fill(0),
+    chat: new Array(3).fill(0),
   };
   software.by = Object.fromEntries(software.boxes.map((b) => [b.id, b]));
 
@@ -549,6 +554,7 @@ export function createStack(root, opts = {}) {
     storyTarget: 0,
     story: 0,
     over: 0,
+    spot: null,
     alpha: [1, 1, 1],
     yaw: 0,
     pitch: 0,
@@ -1022,12 +1028,12 @@ export function createStack(root, opts = {}) {
       drawBox(b, z, grow);
       const top = z + b.h * grow;
       if (grow < 0.98) continue;
-      label(b.label, b.x + 0.3, b.y + b.d - 0.36, top + 0.004, b.kind === "bar" ? 0.4 : 0.38, b.paper.text);
+      label(b.label, b.x + 0.3, b.y + b.d - 0.36, top + 0.004, b.kind === "bar" ? 0.4 : 0.34, b.paper.text);
 
       if (b.id === "agents") {
         // the agent writing code: five lines typed one after another, its suggestion in blue
-        const lens = [2.8, 2.0, 2.4, 1.4, 2.2];
-        const indent = [0, 0.35, 0.35, 0.7, 0];
+        const lens = [2.1, 1.5, 1.8, 1.05, 1.65];
+        const indent = [0, 0.26, 0.26, 0.52, 0];
         onPlane(b.x + 0.36, b.y + 0.45, top + 0.004, 1, () => {
           for (let k = 0; k < lens.length; k++) {
             const v = clamp(sw.code[k]);
@@ -1038,15 +1044,33 @@ export function createStack(root, opts = {}) {
           }
         });
       }
-      if (b.id === "sei") {
-        // the dashboard: six bars, one per team, rising as their calls are metered
-        onPlane(b.x + 0.42, b.y + 0.4, top + 0.004, 1, () => {
+      if (b.id === "assistant") {
+        // the company agent: a question, then its answer written out in blue, then a follow-up
+        const rows = [
+          [0, 1.5],
+          [0.5, 1.85],
+          [0, 1.15],
+        ];
+        onPlane(b.x + 0.36, b.y + 0.5, top + 0.004, 1, () => {
+          for (let k = 0; k < rows.length; k++) {
+            const v = clamp(sw.chat[k]);
+            const [dx, len] = rows[k];
+            ctx.fillStyle = "rgba(70, 66, 60, 0.1)";
+            ctx.fillRect(dx, k * 0.62, len, 0.3);
+            ctx.fillStyle = rgb(k === 1 ? C.blue : C.ink, k === 1 ? 0.4 + 0.45 * v : 0.22 + 0.3 * v);
+            ctx.fillRect(dx, k * 0.62, len * v, 0.3);
+          }
+        });
+      }
+      if (b.id === "portal") {
+        // the portal: six bars, one per team, rising as their calls are metered
+        onPlane(b.x + 0.4, b.y + 0.4, top + 0.004, 1, () => {
           ctx.fillStyle = "rgba(70, 66, 60, 0.16)";
-          ctx.fillRect(0, 2.02, 3.7, 0.04);
+          ctx.fillRect(0, 2.02, 2.5, 0.04);
           for (let k = 0; k < sw.meter.length; k++) {
             const v = clamp(sw.meter[k]);
             ctx.fillStyle = rgb(C.blue, 0.42 + 0.5 * v);
-            ctx.fillRect(k * 0.62, 2.0 - 1.8 * v, 0.3, 1.8 * v);
+            ctx.fillRect(k * 0.44, 2.0 - 1.8 * v, 0.24, 1.8 * v);
           }
         });
       }
@@ -1263,10 +1287,11 @@ export function createStack(root, opts = {}) {
     } else if (p.dir < 0) {
       if (seg < 5)
         once(8, () => {
-          // the answer comes back up through the Model API to the developer's coding agent
+          // the answer comes back up through the gateway to whoever asked: a developer's coding agent,
+          // or now and then an employee's company agent
           if (p.hole) p.hole.ping = 0.8;
           sw.by.gateway.glow = 0.4;
-          sw.by.agents.glow = 0.45;
+          (Math.random() < 0.3 ? sw.by.assistant : sw.by.agents).glow = 0.45;
         });
       if (seg < 3) once(16, () => (p.port.ping = 0.8));
     }
@@ -1311,6 +1336,8 @@ export function createStack(root, opts = {}) {
     for (const p of sw.holes) p.ping = Math.max(0, p.ping - dt * 2.2);
     for (const b of world.hardware.boxes) b.glow = Math.max(0, b.glow - dt * 1.5);
     for (const b of sw.boxes) b.glow = Math.max(0, b.glow - dt * 2.4);
+    // a piece the page is talking about stays lit while it is read
+    if (st.spot && sw.by[st.spot]) sw.by[st.spot].glow = Math.max(sw.by[st.spot].glow, 0.78);
     for (let k = 0; k < sw.meter.length; k++) sw.meter[k] = Math.max(0.22, sw.meter[k] - dt * 0.05);
     for (const sled of world.hardware.sleds) {
       const wave = 0.72 + 0.16 * Math.sin(st.time * 0.7 + sled.seed) + 0.07 * Math.sin(st.time * 1.9 + sled.seed * 3);
@@ -1340,6 +1367,12 @@ export function createStack(root, opts = {}) {
     for (let k = 0; k < sw.code.length; k++) {
       const target = cycle > 1 + k * 1.2 && cycle < 11.5 ? 1 : 0;
       sw.code[k] += (target - sw.code[k]) * ease(target ? 1.8 : 5);
+    }
+    // the company agent's exchange runs on its own, slower beat, out of step with the code
+    const talk = (st.time * 0.5 + 6) % 12;
+    for (let k = 0; k < sw.chat.length; k++) {
+      const target = talk > 0.6 + k * 2.1 && talk < 10.4 ? 1 : 0;
+      sw.chat[k] += (target - sw.chat[k]) * ease(target ? (k === 1 ? 0.9 : 2.4) : 5);
     }
 
     // requests: a steady stream at one pace, each pausing on its GPU before the answer comes back
@@ -1542,6 +1575,17 @@ export function createStack(root, opts = {}) {
     },
     setExplode(v) {
       st.explode = clamp(v);
+    },
+    // Lights one piece of the software sheet ("gateway", "agents", "assistant", "portal") and keeps
+    // it lit while a page talks about it; null lets the requests alone light the pieces again.
+    setSpot(id) {
+      const next = id && world.software.by[id] ? id : null;
+      if (next === st.spot) return;
+      st.spot = next;
+      if (still) {
+        for (const b of world.software.boxes) b.glow = b.id === next ? 0.78 : 0;
+        draw();
+      }
     },
     // The home page's story position, from the scroll: 0 hero, 1 overview, 2 to 4 the layers.
     setStory(pos) {

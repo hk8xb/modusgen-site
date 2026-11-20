@@ -21,9 +21,9 @@
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/MonaSans-VF-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/site.css?v=8c1dde1509">
+  <link rel="stylesheet" href="assets/css/site.css?v=c79ebf5004">
   <script>document.documentElement.classList.add("js");</script>
-  <script type="module" src="assets/js/main.js?v=8c1dde1509"></script>
+  <script type="module" src="assets/js/main.js?v=c79ebf5004"></script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "ModusGen", "url": "https://modusgen.com/", "description": "ModusGen switches your company to open-weight models on infrastructure you own, and gives you the software to run them."}</script>
 </head>
 <body class="page--home">
@@ -48,7 +48,7 @@
           <h1 class="hero__title" data-lines>Cut your inference bill. <span class="tone">Own the stack.</span></h1>
           <p class="hero__lede">ModusGen switches your company to open-weight models on infrastructure you own, and gives you the software to run them.</p>
           <div class="stack stack--hero" data-stack="hero">
-            <canvas class="stack__canvas" role="img" aria-label="The ModusGen stack in three layers: your teams on top; the model API, coding agents and an SEI dashboard in the middle; GPU machines underneath. Requests travel from people through the model API, down to your machines or out to frontier models, and back."></canvas>
+            <canvas class="stack__canvas" role="img" aria-label="The ModusGen stack in three layers: your teams on top; the model gateway, coding agents, a company agent and the company portal in the middle; GPU machines underneath. Requests travel from people through the model API, down to your machines or out to frontier models, and back."></canvas>
             <noscript><img class="stack__poster" src="assets/img/stack-poster.webp" width="1200" height="1280" alt="Three stacked layers: organization, platform and infrastructure."></noscript>
           </div>
           <div class="hero__actions">
@@ -73,34 +73,35 @@
           <article class="chapter" id="layer-platform" data-layer="software" data-anchor>
             <div class="stack stack--inline" data-stack="inline" data-focus="software"><canvas class="stack__canvas" aria-hidden="true"></canvas></div>
             <h3>Software for every model you run.</h3>
-            <p>A model API that puts your own models and frontier ones behind one key, coding agents for every developer, and an SEI dashboard that shows adoption, delivery and cost by team.</p>
+            <p>A model gateway that puts your own models and frontier ones behind one key, coding agents for every developer, and a company portal whose SEI dashboard shows adoption, delivery and cost by team.</p>
             <div class="panel console console--mini" data-console>
               <div class="console__bar">
                 <span class="console__brand">
                   <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M0 23.4V5A5 5 0 0 1 5 0H23.4A0.6 0.6 0 0 1 24 0.6V4.4A0.6 0.6 0 0 1 23.4 5H5.6A0.6 0.6 0 0 0 5 5.6V23.4A0.6 0.6 0 0 1 4.4 24H0.6A0.6 0.6 0 0 1 0 23.4Z"/><rect x="19" y="7" width="5" height="17" rx="0.6"/><rect x="12.4" y="19" width="5" height="5" rx="0.6"/></svg>
                   SEI dashboard
                 </span>
+                <span class="console__period">Last 30 days</span>
               </div>
-              <div class="console__scroll" tabindex="0" role="region" aria-label="Example SEI dashboard by team: weekly active developers, AI-assisted pull requests and model cost per developer">
+              <div class="console__scroll" tabindex="0" role="region" aria-label="Example SEI dashboard by team: weekly active developers, pull requests with agent work and model cost per developer">
                 <table class="console__table">
                   <thead>
                     <tr>
                       <th scope="col">Team</th>
-                      <th scope="col">Weekly active</th>
-                      <th scope="col" class="r">AI-assisted PRs</th>
-                      <th scope="col" class="r">Cost / dev</th>
+                      <th scope="col" class="r">Weekly active</th>
+                      <th scope="col" class="r">PRs with agent work</th>
+                      <th scope="col" class="r">Cost per developer</th>
                     </tr>
                   </thead>
                   <tbody>
-                  <tr><th scope="row">Payments</th><td><span class="meter" style="--v:.92"><i></i></span><span class="pct">92%</span></td><td class="r">64%</td><td class="r">$91</td></tr>
-                  <tr><th scope="row">Platform</th><td><span class="meter" style="--v:.89"><i></i></span><span class="pct">89%</span></td><td class="r">58%</td><td class="r">$79</td></tr>
-                  <tr><th scope="row">Data</th><td><span class="meter" style="--v:.84"><i></i></span><span class="pct">84%</span></td><td class="r">51%</td><td class="r">$86</td></tr>
-                  <tr><th scope="row">Mobile</th><td><span class="meter" style="--v:.77"><i></i></span><span class="pct">77%</span></td><td class="r">43%</td><td class="r">$72</td></tr>
-                  <tr><th scope="row">Growth</th><td><span class="meter" style="--v:.86"><i></i></span><span class="pct">86%</span></td><td class="r">55%</td><td class="r">$88</td></tr>
-                  <tr><th scope="row">Internal tools</th><td><span class="meter" style="--v:.81"><i></i></span><span class="pct">81%</span></td><td class="r">61%</td><td class="r">$83</td></tr>
+                  <tr><th scope="row">Routing</th><td class="r"><span class="pct">91%</span><span class="meter" style="--v:.91"><i></i></span></td><td class="r">57%</td><td class="r">$134</td></tr>
+                  <tr><th scope="row">Payments</th><td class="r"><span class="pct">95%</span><span class="meter" style="--v:.95"><i></i></span></td><td class="r">67%</td><td class="r">$141</td></tr>
+                  <tr><th scope="row">Growth</th><td class="r"><span class="pct">86%</span><span class="meter" style="--v:.86"><i></i></span></td><td class="r">48%</td><td class="r">$135</td></tr>
+                  <tr><th scope="row">Platform</th><td class="r"><span class="pct">91%</span><span class="meter" style="--v:.91"><i></i></span></td><td class="r">58%</td><td class="r">$136</td></tr>
+                  <tr><th scope="row">Data</th><td class="r"><span class="pct">81%</span><span class="meter" style="--v:.81"><i></i></span></td><td class="r">47%</td><td class="r">$121</td></tr>
+                  <tr><th scope="row">Mobile</th><td class="r"><span class="pct">52%</span><span class="meter" style="--v:.52"><i></i></span></td><td class="r">36%</td><td class="r">$103</td></tr>
                   </tbody>
                   <tfoot>
-                    <tr><th scope="row">All teams</th><td><span class="meter" style="--v:.86"><i></i></span><span class="pct">86%</span></td><td class="r">56%</td><td class="r">$84</td></tr>
+                    <tr><th scope="row">All teams</th><td class="r"><span class="pct">84%</span><span class="meter" style="--v:.84"><i></i></span></td><td class="r">52%</td><td class="r">$129</td></tr>
                   </tfoot>
                 </table>
               </div>
@@ -118,7 +119,7 @@
 
       <div class="story__stage" data-stage>
         <div class="stack stack--story" data-stack="story">
-          <canvas class="stack__canvas" role="img" aria-label="The ModusGen stack in three layers: your teams on top; the model API, coding agents and an SEI dashboard in the middle; GPU machines underneath. Requests go through the model API to your machines or to frontier models. As you read on it steps back to show the whole stack, then brings each layer forward in turn."></canvas>
+          <canvas class="stack__canvas" role="img" aria-label="The ModusGen stack in three layers: your teams on top; the model gateway, coding agents, a company agent and the company portal in the middle; GPU machines underneath. Requests go through the model API to your machines or to frontier models. As you read on it steps back to show the whole stack, then brings each layer forward in turn."></canvas>
           <noscript><img class="stack__poster" src="assets/img/stack-poster.webp" width="1200" height="1280" alt="Three stacked layers: organization, platform and infrastructure."></noscript>
         </div>
         <nav class="tour__nav" aria-label="Layers of the stack">
